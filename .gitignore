@@ -27,3 +27,10 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+.idea/discord.xml
+
+.idea/google-java-format.xml
+
+.idea/sonarlint/issuestore/index.pb
+
+.idea/workspace.xml
