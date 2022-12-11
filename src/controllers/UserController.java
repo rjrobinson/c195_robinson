@@ -6,8 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import models.User;
 import support.SceneHelper;
 
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -59,7 +61,7 @@ public class UserController {
     }
 
     @FXML
-    public void login(ActionEvent e) throws java.io.IOException {
+    public void login(ActionEvent e) throws java.io.IOException, SQLException {
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         String username = usernameField.getText();
@@ -70,7 +72,7 @@ public class UserController {
             sceneHelper.displayAlert(Alert.AlertType.ERROR, rb.getString("error.empty_field"));
         } else {
             // if username and password are correct, show main scene
-            if (username.equals("test") && password.equals("test")) {
+            if (User.validateUser(username, password)) {
                 sceneHelper.changeScene("/views/customers/index.fxml");
             } else {
                 // if username and password are incorrect, show alert
