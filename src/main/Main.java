@@ -12,13 +12,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
 public class Main extends Application {
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 
     @FXML
     private Button exitField;
@@ -47,11 +41,12 @@ public class Main extends Application {
     @FXML
     private Label usernameLabel;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws java.io.IOException {
-
-//        Locale.setDefault(new Locale("fr"));
-
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         try {
@@ -61,8 +56,6 @@ public class Main extends Application {
             primaryStage.setScene(new Scene(root));
             primaryStage.setResizable(false);
 
-            // This gives us the zone.
-
             primaryStage.setOnCloseRequest(event -> {
                 event.consume();
                 try {
@@ -71,7 +64,6 @@ public class Main extends Application {
                     throw new RuntimeException(e);
                 }
             });
-
 
             primaryStage.show();
         } catch (Exception e) {

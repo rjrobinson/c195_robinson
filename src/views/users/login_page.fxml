@@ -5,16 +5,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="336.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="336.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserController">
     <children>
         <TextField fx:id="usernameField" layoutX="130.0" layoutY="77.0" prefHeight="26.0" prefWidth="160.0" />
         <TextField fx:id="passwordField" layoutX="132.0" layoutY="113.0" />
         <Label fx:id="loginLabel" layoutX="33.0" layoutY="35.0" prefHeight="17.0" prefWidth="255.0" text="%label.header" textAlignment="CENTER" />
-        <Button fx:id="loginButton" layoutX="132.0" layoutY="158.0" mnemonicParsing="false"  prefHeight="26.0" prefWidth="160.0" text="%button.login" onAction="#login"/>
-        <Button fx:id="exitField" layoutX="16.0" layoutY="255.0" mnemonicParsing="false"  prefHeight="26.0" prefWidth="294.0" text="%label.exit" onAction="#logout" />
+        <Button fx:id="loginButton" layoutX="132.0" layoutY="158.0" mnemonicParsing="false" onAction="#login" prefHeight="26.0" prefWidth="160.0" text="%button.login" />
+        <Button fx:id="exitField" layoutX="16.0" layoutY="255.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="294.0" text="%label.exit" />
         <Label fx:id="locationLabel" layoutX="32.0" layoutY="215.0" prefHeight="17.0" prefWidth="54.0" text="%label.location" />
         <Label fx:id="usernameLabel" layoutX="29.0" layoutY="82.0" text="%label.username" />
         <Label fx:id="passwordLabel" layoutX="28.0" layoutY="118.0" text="%label.password" />
-        <TextField fx:id="locationField" editable="false" layoutX="136.0" layoutY="210.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: white;" />
+        <Label fx:id="locationField" layoutX="136.0" layoutY="210.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: white;" text="New Brunswick, NJ" />
     </children>
 </AnchorPane>
