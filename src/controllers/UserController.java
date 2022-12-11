@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -84,16 +85,29 @@ public class UserController {
 
     @FXML
     public void logout(ActionEvent e) throws java.io.IOException {
-        ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        logoutHandler(stage);
+    }
 
-        alert.setTitle(rb.getString("logout"));
+    public static void logoutHandler(Stage stage) {
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        alert.setHeaderText(rb.getString("logout.header"));
-        alert.setContentText(rb.getString("logout.content"));
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            System.out.println("Logout button clicked");
-            stage.close();
+            alert.setTitle(rb.getString("logout"));
+
+            alert.setHeaderText(rb.getString("logout.header"));
+            alert.setContentText(rb.getString("logout.content"));
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                System.out.println("Logout button clicked");
+                stage.close();
+            }
+        } catch (Exception e) {
+            if (stage != null) {
+                stage.close();
+            } else {
+                Platform.exit();
+                System.exit(0);
+            }
         }
     }
 }

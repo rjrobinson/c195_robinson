@@ -1,5 +1,7 @@
 package main;
 
+import controllers.UserController;
+import database.DatabaseError;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +11,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @FXML
@@ -46,7 +50,8 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws java.io.IOException {
+    public void start(Stage primaryStage) throws java.io.IOException, DatabaseError, SQLException {
+//        Locale.setDefault(new Locale("fr"));
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         try {
@@ -73,14 +78,6 @@ public class Main extends Application {
 
     @FXML
     public void logout(Stage stage) throws java.io.IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Logout");
-        alert.setHeaderText("You're about to logout");
-        alert.setContentText("Do you want to save before existing");
-
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            System.out.println("Logout button clicked");
-            stage.close();
-        }
+        UserController.logoutHandler(stage);
     }
 }
