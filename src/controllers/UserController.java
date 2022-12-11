@@ -4,13 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import support.SceneHelper;
 
 import java.time.ZoneId;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class UserController {
 
@@ -59,13 +59,39 @@ public class UserController {
     }
 
     @FXML
-    void login(ActionEvent event) {
+    public void login(ActionEvent e) throws java.io.IOException {
+        ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // if username or password are empty, show alert
+        if (username.isEmpty() || password.isEmpty()) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, rb.getString("error.empty_field"));
+        } else {
+            // if username and password are correct, show main scene
+            if (username.equals("test") && password.equals("test")) {
+                sceneHelper.changeScene("/views/customers/index.fxml");
+            } else {
+                // if username and password are incorrect, show alert
+                sceneHelper.displayAlert(Alert.AlertType.ERROR, rb.getString("error.invalid_login"));
+                sceneHelper.changeScene("/views/users/login_page.fxml");
+            }
+        }
     }
 
     @FXML
-    void logout(ActionEvent event) {
+    public void logout(ActionEvent e) throws java.io.IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout");
+        alert.setHeaderText("You're about to logout");
+        alert.setContentText("Do you want to save before existing");
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            stage = (Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
 
+            System.out.println("Logout button clicked");
+            stage.close();
+        }
     }
 
 }
