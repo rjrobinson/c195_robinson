@@ -82,16 +82,16 @@ public class UserController {
 
     @FXML
     public void logout(ActionEvent e) throws java.io.IOException {
+        ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Logout");
-        alert.setHeaderText("You're about to logout");
-        alert.setContentText("Do you want to save before existing");
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            stage = (Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
 
+        alert.setTitle(rb.getString("logout"));
+
+        alert.setHeaderText(rb.getString("logout.header"));
+        alert.setContentText(rb.getString("logout.content"));
+        if (alert.showAndWait().get() == ButtonType.OK) {
             System.out.println("Logout button clicked");
             stage.close();
         }
     }
-
 }
