@@ -56,7 +56,6 @@ public class UserController {
     @FXML
     public void initialize() {
         sceneHelper = new SceneHelper(stage);
-
         // get users current location
         locationField.setText(ZoneId.systemDefault().toString());
     }

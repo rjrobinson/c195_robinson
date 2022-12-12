@@ -1,13 +1,12 @@
 package models;
 
-import database.Database;
+import main.Main;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class User {
+public class User extends Base {
     private int userId;
     private String userName;
     private String password;
@@ -67,8 +66,6 @@ public class User {
 
     //    Database Operations
     public static boolean validateUser(String username, String password) throws SQLException {
-        Database db = new Database();
-        Connection conn = db.getConnection();
 
         PreparedStatement stmt = conn.prepareStatement(
                 "SELECT user_id FROM users WHERE user_name=? AND password=? LIMIT 1"
@@ -79,7 +76,7 @@ public class User {
 
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-            new User(rs.getInt("user_id"), username);
+            Main.setCurrentUser(new User(rs.getInt("user_id"), username));
             System.out.println("User logged in: " + username);
             return true;
         }
