@@ -1,22 +1,27 @@
 package main;
 
 import controllers.UserController;
-import database.DatabaseError;
+
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.User;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+
 public class Main extends Application {
+
+    private static User currentUser;
 
     @FXML
     private Button exitField;
@@ -50,7 +55,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws java.io.IOException, DatabaseError, SQLException {
+    public void start(Stage primaryStage) throws java.io.IOException {
 //        Locale.setDefault(new Locale("fr"));
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
@@ -79,5 +84,13 @@ public class Main extends Application {
     @FXML
     public void logout(Stage stage) throws java.io.IOException {
         UserController.logoutHandler(stage);
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
     }
 }
