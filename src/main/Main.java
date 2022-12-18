@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import models.User;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -55,12 +56,14 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws java.io.IOException {
+    public void start(Stage primaryStage) throws java.io.IOException, SQLException {
 //        Locale.setDefault(new Locale("fr"));
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/users/login_page.fxml")), rb);
+//            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/users/login_page.fxml")), rb);
+            User.validateUser("test", "test");
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/layout/index.fxml")), rb);
 
             primaryStage.setTitle("WGU | SW2 | C195");
             primaryStage.setScene(new Scene(root));

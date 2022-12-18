@@ -67,13 +67,14 @@ public class UserController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+
         // if username or password are empty, show alert
         if (username.isEmpty() || password.isEmpty()) {
             sceneHelper.displayAlert(Alert.AlertType.ERROR, rb.getString("error.empty_field"));
         } else {
             // if username and password are correct, show main scene
             if (User.validateUser(username, password)) {
-                sceneHelper.changeScene("/views/customers/index.fxml");
+                sceneHelper.changeScene("/views/layout/index.fxml");
             } else {
                 // if username and password are incorrect, show alert
                 sceneHelper.displayAlert(Alert.AlertType.ERROR, rb.getString("error.invalid_login"));

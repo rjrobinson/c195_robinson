@@ -10,10 +10,6 @@ public class Database {
     // The database user name and password
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
-
-    // The JDBC driver name and database URL
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-
     // The connection to the database
     private Connection conn;
 
