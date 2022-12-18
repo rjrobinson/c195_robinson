@@ -11,18 +11,18 @@ import static models.Base.conn;
 
 public class Customer {
 
-    public int customerID;
-    public String customerName;
-    public String address;
-    public String postalCode;
-    public String phone;
-    public String createdBy;
-    public String createDate;
-    public String lastUpdate;
-    public String lastUpdatedBy;
-    public int divisionID;
+    private int customerID;
+    private String customerName;
+    private String address;
+    private String postalCode;
+    private String phone;
+    private String createdBy;
+    private String createDate;
+    private String lastUpdate;
+    private String lastUpdatedBy;
+    private String divisionName;
 
-    public Customer(int customerID, String customerName, String address, String postalCode, String phone, String createdBy, String createDate, String lastUpdate, String lastUpdatedBy, int divisionID) {
+    public Customer(int customerID, String customerName, String address, String postalCode, String phone, String createdBy, String createDate, String lastUpdate, String lastUpdatedBy, String divisionName) {
         this.customerID = customerID;
         this.customerName = customerName;
         this.address = address;
@@ -32,14 +32,15 @@ public class Customer {
         this.createDate = createDate;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
-        this.divisionID = divisionID;
+        this.divisionName = divisionName;
     }
 
     static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
 
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM customers");
+        PreparedStatement stmt = conn.prepareStatement(
+                "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID");
 
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
@@ -53,16 +54,13 @@ public class Customer {
                     rs.getString("Create_Date"),
                     rs.getString("Last_Update"),
                     rs.getString("Last_Updated_By"),
-                    rs.getInt("Division_ID")
+                    rs.getString("Division")
             );
             allCustomers.add(customer);
         }
         return allCustomers;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
@@ -132,12 +130,19 @@ public class Customer {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public int getDivisionID() {
-        return divisionID;
+    public String getDivisionName() {
+        return divisionName;
     }
 
-    public void setDivisionID(int divisionID) {
-        this.divisionID = divisionID;
+    public void setDivisionName(String divisionName) {
+        this.divisionName = divisionName;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public static void addCustomer(Customer customer) {
+        allCustomers.add(customer);
+    }
 }

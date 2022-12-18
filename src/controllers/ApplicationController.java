@@ -113,7 +113,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-@FXML
+    @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     @Override
@@ -131,8 +131,7 @@ public class ApplicationController implements Initializable {
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerID.setCellValueFactory(new PropertyValueFactory<>("CustomerID"));
         customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        //        TODO: fix this
-        //        customerState.setCellValueFactory(new PropertyValueFactory<>("state"));
+        customerState.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
         customerZipcode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerCreatedAt.setCellValueFactory(new PropertyValueFactory<>("createDate"));
@@ -145,15 +144,18 @@ public class ApplicationController implements Initializable {
         apptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+
+        apptContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+
         apptType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptStartDate.setCellValueFactory(new PropertyValueFactory<>("getStartDate"));
+
+        apptStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         apptEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         apptStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         apptEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-        apptCustomer.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        apptUser.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+        apptCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        apptUser.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
 
     }
