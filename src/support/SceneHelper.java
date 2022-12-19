@@ -33,7 +33,7 @@ public class SceneHelper {
         stage.show();
     }
 
-    public void displayAlert(Alert.AlertType alertType, String message) throws IOException {
+    public static void displayAlert(Alert.AlertType alertType, String message) throws IOException {
         Alert alert = new Alert(alertType, message, ButtonType.OK);
         alert.showAndWait();
     }

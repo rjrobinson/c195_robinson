@@ -2,18 +2,21 @@ package controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import models.Appointment;
 import models.Customer;
+import support.SceneHelper;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ApplicationController implements Initializable {
@@ -158,5 +161,55 @@ public class ApplicationController implements Initializable {
         apptUser.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
 
+    }
+
+    /**
+     * The constant selected_part.
+     */
+    public static Customer selectedCustomer = null;
+
+    /**
+     * Part delete handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void customerDeleteHandler(ActionEvent event) throws IOException {
+        selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+
+        if (Objects.isNull(selectedCustomer)) {
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Please select a customer to delete.");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Alert: You are about to delete this");
+            alert.setContentText("Do you want to delete the selected customer?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Customer.deleteCustomer(selectedCustomer.getCustomerID());
+                // refresh table
+                try {
+                    allCustomers = Customer.getAllCustomers();
+                    allAppointments = Appointment.getAllAppointments();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                selectedCustomer = null;
+            }
+        }
+    }
+
+
+    /**
+     * logout button handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        System.exit(0);
     }
 }

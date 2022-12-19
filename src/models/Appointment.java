@@ -56,6 +56,7 @@ public class Appointment {
     static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
+        allAppointments.clear();
         PreparedStatement stmt = conn.prepareStatement(allApptSql());
 
         ResultSet rs = stmt.executeQuery();
@@ -88,28 +89,28 @@ public class Appointment {
 
     public static String allApptSql() {
         return """
-                 SELECT a.Appointment_ID,
-                       c.Customer_Name,
-                       u.User_Name,
-                       co.Contact_Name,
-                       a.Title,
-                       a.Description,
-                       a.Type,
-                       a.Location,
-                       a.start,
-                       a.end,
-                       a.Create_Date,
-                       a.Created_By,
-                       a.Last_Update,
-                       a.Last_Updated_By,
-                       date_format(start, '%Y-%m-%d') as `startDate`,
-                       date_format(start, '%H:%i:%s') as `startTime`,
-                       date_format(end, '%Y-%m-%d') as `endDate`,
-                       date_format(end, '%H:%i:%s') as `endTime`
+                 SELECT    a.appointment_id,
+                           c.customer_name,
+                           u.user_name,
+                           co.contact_name,
+                           a.title,
+                           a.description,
+                           a.type,
+                           a.location,
+                           a.start,
+                           a.end,
+                           a.create_date,
+                           a.created_by,
+                           a.last_update,
+                           a.last_updated_by,
+                           date_format(start, '%Y-%m-%d') AS `startDate`,
+                           date_format(start, '%H:%i:%s') AS `startTime`,
+                           date_format(end, '%Y-%m-%d')   AS `endDate`,
+                           date_format(end, '%H:%i:%s')   AS `endTime`
                 FROM appointments AS a
-                         INNER JOIN customers AS c ON a.Customer_ID = c.Customer_ID
-                         INNER JOIN users AS u ON a.User_ID = u.User_ID
-                         INNER JOIN contacts AS co ON a.Contact_ID = co.Contact_ID
+                         INNER JOIN customers AS c ON a.customer_id = c.customer_id
+                         INNER JOIN users AS u ON a.user_id = u.user_id
+                         INNER JOIN contacts AS co ON a.contact_id = co.contact_id
                                 """;
     }
 
@@ -257,7 +258,6 @@ public class Appointment {
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-
 
 
 }

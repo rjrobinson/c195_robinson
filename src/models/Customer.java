@@ -38,9 +38,11 @@ public class Customer {
     static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
+        allCustomers.clear();
 
         PreparedStatement stmt = conn.prepareStatement(
-                "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID");
+                "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID"
+        );
 
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
@@ -59,6 +61,23 @@ public class Customer {
             allCustomers.add(customer);
         }
         return allCustomers;
+    }
+
+    public static void deleteCustomer(int customerID) {
+
+        try {
+            // First - Delete any appointment associated with this customer
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM appointments WHERE customer_id = ?");
+            stmt.setInt(1, customerID);
+            stmt.executeUpdate();
+
+            // Second - Delete the customer
+            stmt = conn.prepareStatement("DELETE FROM customers WHERE customer_id = ?");
+            stmt.setInt(1, customerID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting customer: " + e.getMessage());
+        }
     }
 
 
