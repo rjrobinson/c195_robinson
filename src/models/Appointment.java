@@ -86,7 +86,17 @@ public class Appointment {
         return allAppointments;
     }
 
-
+    // Database Operations
+    public static void deleteAppointment(int appointmentID) {
+        try {
+            // First - Delete any appointment associated with this customer
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM appointments WHERE Appointment_ID = ?");
+            stmt.setInt(1, appointmentID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error deleting appointment: " + e.getMessage());
+        }
+    }
     public static String allApptSql() {
         return """
                  SELECT    a.appointment_id,

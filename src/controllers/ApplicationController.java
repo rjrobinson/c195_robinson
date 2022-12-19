@@ -169,7 +169,7 @@ public class ApplicationController implements Initializable {
     public static Customer selectedCustomer = null;
 
     /**
-     * Part delete handler.
+     * Customer delete handler.
      *
      * @param event the event
      * @throws IOException the io exception
@@ -197,6 +197,44 @@ public class ApplicationController implements Initializable {
                     throw new RuntimeException(e);
                 }
                 selectedCustomer = null;
+            }
+        }
+    }
+
+
+    /**
+     * The constant selected_part.
+     */
+    public static Appointment selectedAppointment = null;
+
+    /**
+     * Appointment delete handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void appointmentDeleteHandler(ActionEvent event) throws IOException {
+        selectedAppointment = apptTable.getSelectionModel().getSelectedItem();
+
+        if (Objects.isNull(selectedAppointment)) {
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Please select an appointment to delete.");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Alert: You are about to delete this");
+            alert.setContentText("Do you want to delete the selected appointment?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Appointment.deleteAppointment(selectedAppointment.getAppointmentID());
+                // refresh table
+                try {
+                    allAppointments = Appointment.getAllAppointments();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                selectedAppointment = null;
             }
         }
     }
