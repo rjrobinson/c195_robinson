@@ -8,7 +8,7 @@
 
 <AnchorPane fx:id="customerScenePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ApplicationController">
     <children>
-        <Button fx:id="customerNewBtn" layoutX="28.0" layoutY="56.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="79.0" text="New" />
+        <Button fx:id="customerNewBtn" layoutX="28.0" layoutY="56.0" mnemonicParsing="false" onAction="#newCustomerHandler" prefHeight="26.0" prefWidth="79.0" text="New" />
         <TableView fx:id="customerTable" layoutX="26.0" layoutY="98.0" prefHeight="211.0" prefWidth="966.0">
             <columns>
                 <TableColumn fx:id="customerID" prefWidth="75.0" text="ID" />
@@ -23,7 +23,7 @@
                 <TableColumn fx:id="customerUpdatedBy" prefWidth="103.0" text="Last Updated By" />
             </columns>
         </TableView>
-        <Button fx:id="customerUpdateBtn" layoutX="115.0" layoutY="56.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="79.0" text="Update" />
+        <Button fx:id="customerUpdateBtn" layoutX="115.0" layoutY="56.0" mnemonicParsing="false" onAction="#updateCustomerHandler" prefHeight="26.0" prefWidth="79.0" text="Update" />
         <Button fx:id="customerDeleteBtn" layoutX="205.0" layoutY="56.0" mnemonicParsing="false" onAction="#customerDeleteHandler" prefHeight="26.0" prefWidth="79.0" text="Delete" />
         <Button layoutX="822.0" layoutY="743.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="152.0" text="Logout" />
         <Label layoutX="28.0" layoutY="29.0" text="Customer Options" />

@@ -5,9 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import models.Appointment;
 import models.Customer;
 import support.SceneHelper;
@@ -119,8 +121,14 @@ public class ApplicationController implements Initializable {
     @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
+    private Stage stage;
+    private Scene scene;
+    SceneHelper sceneHelper;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        sceneHelper = new SceneHelper(stage);
+
         try {
             allCustomers = Customer.getAllCustomers();
             allAppointments = Appointment.getAllAppointments();
@@ -163,8 +171,15 @@ public class ApplicationController implements Initializable {
 
     }
 
+
+
+    @FXML
+    public void newCustomerHandler(ActionEvent event) throws IOException {
+        sceneHelper.changeScene("/views/customers/_form.fxml");
+    }
+
     /**
-     * The constant selected_part.
+     * The constant selectedCustomer.
      */
     public static Customer selectedCustomer = null;
 
@@ -240,6 +255,25 @@ public class ApplicationController implements Initializable {
     }
 
 
+    /**
+     * Update Customer handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void updateCustomerHandler(ActionEvent event) throws IOException {
+        selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        // Example of correcting a runtime error by preventing null from being passed
+        // to the Controller.
+        if (Objects.isNull(selectedCustomer)) {
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Please select a customer to modify.");
+        } else {
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            SceneHelper sceneHelper = new SceneHelper(stage);
+            sceneHelper.changeScene("/views/customers/_form.fxml");
+        }
+    }
     /**
      * logout button handler.
      *
