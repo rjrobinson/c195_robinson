@@ -10,13 +10,13 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="536.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CustomerController">
     <children>
         <Label fx:id="label" layoutX="5.0" layoutY="8.0" prefHeight="302.0" prefWidth="526.0" />
-        <Label layoutX="23.0" layoutY="23.0" prefHeight="28.0" prefWidth="186.0" text="Customer Form">
+        <Label fx:id="formTitleLabel" layoutX="23.0" layoutY="23.0" prefHeight="28.0" prefWidth="186.0">
             <font>
                 <Font size="17.0" />
             </font>
         </Label>
         <Label layoutX="14.0" layoutY="65.0" prefHeight="28.0" prefWidth="71.0" text="ID" />
-        <TextField fx:id="customerId" layoutX="159.0" layoutY="66.0" prefHeight="26.0" prefWidth="336.0" />
+        <TextField fx:id="customerId" disable="true" layoutX="159.0" layoutY="66.0" prefHeight="26.0" prefWidth="336.0" />
         <Label layoutX="14.0" layoutY="96.0" prefHeight="28.0" prefWidth="90.0" text="Name" />
         <TextField fx:id="customerName" layoutX="159.0" layoutY="97.0" prefHeight="26.0" prefWidth="336.0" />
         <Label layoutX="16.0" layoutY="124.0" prefHeight="28.0" prefWidth="105.0" text="Address" />
@@ -30,6 +30,6 @@
         <ComboBox fx:id="divisionDropdown" layoutX="408.0" layoutY="197.0" prefHeight="26.0" prefWidth="100.0" />
         <Label layoutX="19.0" layoutY="232.0" prefHeight="28.0" prefWidth="100.0" text="Phone" />
         <Button fx:id="saveBtn" layoutX="397.0" layoutY="261.0" mnemonicParsing="false" text="Save" />
-        <Button fx:id="cancelBtn" layoutX="452.0" layoutY="261.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="cancelBtn" layoutX="452.0" layoutY="261.0" mnemonicParsing="false" onAction="#cancelBtnHandler" text="Cancel" />
     </children>
 </AnchorPane>

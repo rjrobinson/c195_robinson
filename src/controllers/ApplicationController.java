@@ -121,8 +121,8 @@ public class ApplicationController implements Initializable {
     @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
-    private Stage stage;
-    private Scene scene;
+    public Stage stage;
+    public Scene scene;
     SceneHelper sceneHelper;
 
     @Override
@@ -175,6 +175,9 @@ public class ApplicationController implements Initializable {
 
     @FXML
     public void newCustomerHandler(ActionEvent event) throws IOException {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        SceneHelper sceneHelper = new SceneHelper(stage);
+
         sceneHelper.changeScene("/views/customers/_form.fxml");
     }
 
