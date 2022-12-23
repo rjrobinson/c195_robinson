@@ -58,6 +58,8 @@ public class CustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Customer selectedCustomer = ApplicationController.selectedCustomer;
         if (selectedCustomer == null) {
+            //             THIS IS FOR NEW FORM
+            customerId.setText("Auto-Generated");
             formTitleLabel.setText("Add Customer");
             customerId.setDisable(true);
             divisionDropdown.setDisable(true);
@@ -67,6 +69,7 @@ public class CustomerController implements Initializable {
                 throw new RuntimeException(e);
             }
         } else {
+            //             THIS IS FOR EDIT FORM
             customerId.setDisable(true);
             customerId.setText(String.valueOf(selectedCustomer.getCustomerID()));
 
@@ -75,15 +78,18 @@ public class CustomerController implements Initializable {
             customerAddress.setText(ApplicationController.selectedCustomer.getAddress());
             customerPostalCode.setText(ApplicationController.selectedCustomer.getPostalCode());
             phoneLabel.setText(ApplicationController.selectedCustomer.getPhone());
-//             TODO
-//            divisionDropdown.setValue(ApplicationController.selectedCustomer.getDivision());
+            try {
+                countryDropdown.setItems(Country.getAllCountries());
+                countryDropdown.setValue(ApplicationController.selectedCustomer.getCountryName());
+                divisionDropdown.setItems(Division.getDivisionsByCountry(countryDropdown.getValue()));
+                divisionDropdown.setValue(ApplicationController.selectedCustomer.getDivisionName());
+                divisionDropdown.setDisable(false);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
-
-//    @FXML
-//    public static ObservableList<Division> divisions = FXCollections.observableArrayList();
-//    @FXML
-//    public static ObservableList<Country> countries = FXCollections.observableArrayList();
 
     @FXML
     void populateDivisionDropdown(ActionEvent event) {

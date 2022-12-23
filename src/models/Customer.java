@@ -21,8 +21,9 @@ public class Customer {
     private String lastUpdate;
     private String lastUpdatedBy;
     private String divisionName;
+    private String countryName;
 
-    public Customer(int customerID, String customerName, String address, String postalCode, String phone, String createdBy, String createDate, String lastUpdate, String lastUpdatedBy, String divisionName) {
+    public Customer(int customerID, String customerName, String address, String postalCode, String phone, String createdBy, String createDate, String lastUpdate, String lastUpdatedBy, String divisionName, String countryName) {
         this.customerID = customerID;
         this.customerName = customerName;
         this.address = address;
@@ -33,6 +34,7 @@ public class Customer {
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
         this.divisionName = divisionName;
+        this.countryName = countryName;
     }
 
     static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -41,7 +43,7 @@ public class Customer {
         allCustomers.clear();
 
         PreparedStatement stmt = conn.prepareStatement(
-                "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID"
+                "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division, co.country FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID JOIN countries AS co ON d.Country_ID = co.Country_ID"
         );
 
         ResultSet rs = stmt.executeQuery();
@@ -56,7 +58,8 @@ public class Customer {
                     rs.getString("Create_Date"),
                     rs.getString("Last_Update"),
                     rs.getString("Last_Updated_By"),
-                    rs.getString("Division")
+                    rs.getString("Division"),
+                    rs.getString("country")
             );
             allCustomers.add(customer);
         }
@@ -163,6 +166,10 @@ public class Customer {
 
     public static void addCustomer(Customer customer) {
         allCustomers.add(customer);
+    }
+
+    public String getCountryName() {
+        return countryName;
     }
 
 }

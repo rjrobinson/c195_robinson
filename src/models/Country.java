@@ -56,9 +56,7 @@ public class Country {
 
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-
             allCountryNames.add(rs.getString("country"));
-
         }
         return allCountryNames;
     }
