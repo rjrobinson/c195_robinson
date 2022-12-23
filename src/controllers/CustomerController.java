@@ -10,10 +10,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Country;
 import models.Customer;
+import models.Division;
 import support.SceneHelper;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerController implements Initializable {
@@ -21,7 +23,7 @@ public class CustomerController implements Initializable {
     private Button cancelBtn;
 
     @FXML
-    private ComboBox<?> countryDropdown;
+    private ComboBox<String> countryDropdown;
 
     @FXML
     private TextField customerAddress;
@@ -36,7 +38,7 @@ public class CustomerController implements Initializable {
     private TextField customerPostalCode;
 
     @FXML
-    private ComboBox<Country> divisionDropdown;
+    private ComboBox<String> divisionDropdown;
 
     @FXML
     private Label label;
@@ -51,12 +53,19 @@ public class CustomerController implements Initializable {
     private Label formTitleLabel;
 
     SceneHelper sceneHelper;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Customer selectedCustomer = ApplicationController.selectedCustomer;
         if (selectedCustomer == null) {
             formTitleLabel.setText("Add Customer");
             customerId.setDisable(true);
+            divisionDropdown.setDisable(true);
+            try {
+                countryDropdown.setItems(Country.getAllCountries());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             customerId.setDisable(true);
             customerId.setText(String.valueOf(selectedCustomer.getCustomerID()));
@@ -68,7 +77,21 @@ public class CustomerController implements Initializable {
             phoneLabel.setText(ApplicationController.selectedCustomer.getPhone());
 //             TODO
 //            divisionDropdown.setValue(ApplicationController.selectedCustomer.getDivision());
-//            countryDropdown.setValue(ApplicationController.selectedCustomer.getDivision().getCountry());
+        }
+    }
+
+//    @FXML
+//    public static ObservableList<Division> divisions = FXCollections.observableArrayList();
+//    @FXML
+//    public static ObservableList<Country> countries = FXCollections.observableArrayList();
+
+    @FXML
+    void populateDivisionDropdown(ActionEvent event) {
+        try {
+            divisionDropdown.setItems(Division.getDivisionsByCountry(countryDropdown.getValue()));
+            divisionDropdown.setDisable(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

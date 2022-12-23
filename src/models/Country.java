@@ -1,4 +1,13 @@
-package model;
+package models;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static models.Base.conn;
 
 /**
  * The type Country.
@@ -30,13 +39,37 @@ public class Country {
         this.lastUpdateBy = lastUpdateBy;
     }
 
+
+    static ObservableList<Country> allCountries = FXCollections.observableArrayList();
+
+    static ObservableList<String> allCountryNames = FXCollections.observableArrayList();
+    public Country(String country) {
+        this.country = country;
+    }
+
+    public static ObservableList<String> getAllCountries() throws SQLException {
+        allCountryNames.clear();
+
+        PreparedStatement stmt = conn.prepareStatement(
+                "SELECT country FROM countries"
+        );
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+
+            allCountryNames.add(rs.getString("country"));
+
+        }
+        return allCountryNames;
+    }
+
     /**
      * Gets country id.
      *
      * @return the country id
      */
-    public int getCountryId() {
-        return countryId;
+    public String getCountryId() {
+        return String.valueOf(countryId);
     }
 
     /**
