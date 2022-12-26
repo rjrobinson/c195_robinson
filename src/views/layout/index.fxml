@@ -25,7 +25,7 @@
         </TableView>
         <Button fx:id="customerUpdateBtn" layoutX="115.0" layoutY="56.0" mnemonicParsing="false" onAction="#updateCustomerHandler" prefHeight="26.0" prefWidth="79.0" text="Update" />
         <Button fx:id="customerDeleteBtn" layoutX="205.0" layoutY="56.0" mnemonicParsing="false" onAction="#customerDeleteHandler" prefHeight="26.0" prefWidth="79.0" text="Delete" />
-        <Button layoutX="822.0" layoutY="743.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="152.0" text="Logout" />
+        <Button fx:id="logoutBtn" layoutX="822.0" layoutY="743.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="152.0" text="Logout" />
         <Label layoutX="28.0" layoutY="29.0" text="Customer Options" />
         <TableView fx:id="apptTable" layoutX="28.0" layoutY="330.0" prefHeight="379.0" prefWidth="966.0">
             <columns>

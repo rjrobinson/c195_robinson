@@ -17,6 +17,10 @@ public class Division {
     @FXML
     private String division;
 
+public Integer getDivisionID() {
+        return divisionId;
+    }
+
 
     public Division(int divisionId, String division) {
         this.divisionId = divisionId;
@@ -24,6 +28,7 @@ public class Division {
     }
 
     public static ObservableList<String> divisionNames = FXCollections.observableArrayList();
+
     @FXML
     public static ObservableList<String> getDivisionsByCountry(String country) throws SQLException {
         divisionNames.clear();
@@ -39,5 +44,27 @@ public class Division {
 
         }
         return divisionNames;
+    }
+
+    public static Division getIdFromName(String divisionName) {
+        Division division = null;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT division_id FROM first_level_divisions WHERE division = ?"
+            );
+
+            stmt.setString(1, divisionName);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                division = new Division(
+                        rs.getInt("division_id"),
+                        divisionName
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return division;
     }
 }

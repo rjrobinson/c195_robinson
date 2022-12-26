@@ -37,6 +37,27 @@ public class Customer {
         this.countryName = countryName;
     }
 
+    public Customer(String customerName, String address, String postalCode, String phone, String createdBy, String lastUpdatedBy, String divisionName) {
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.createdBy = createdBy;
+        this.createDate = createDate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.divisionName = divisionName;
+    }
+
+    public Customer(int customerID, String customerName, String address, String postalCode, String phone, String lastUpdatedBy, String divisionName) {
+        this.customerID = customerID;
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.divisionName = divisionName;
+    }
+
     static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
@@ -83,6 +104,10 @@ public class Customer {
         }
     }
 
+
+    public String formattedAddress() {
+        return address + ", " + divisionName;
+    }
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
@@ -172,4 +197,45 @@ public class Customer {
         return countryName;
     }
 
+    public void create() {
+        Division division = Division.getIdFromName(this.divisionName);
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Create_Date, Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)"
+            );
+            stmt.setString(1, this.customerName);
+            stmt.setString(2, this.address);
+            stmt.setString(3, this.postalCode);
+            stmt.setString(4, this.phone);
+            stmt.setString(5, this.createdBy);
+            stmt.setString(6, this.lastUpdatedBy);
+            stmt.setInt(7, division.getDivisionID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error creating customer: " + e.getMessage());
+        }
+    }
+
+    public void update() throws SQLException {
+        Division division = Division.getIdFromName(this.divisionName);
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "UPDATE customers SET Customer_Name = ?,Address = ?, Postal_Code  = ?, Phone  = ?, Last_Update = now(), Last_Updated_By  = ?, Division_ID = ? WHERE Customer_ID = ?"
+            );
+            stmt.setString(1, this.customerName);
+            stmt.setString(2, this.address);
+            stmt.setString(3, this.postalCode);
+            stmt.setString(4, this.phone);
+            stmt.setString(5, this.lastUpdatedBy);
+            stmt.setInt(6, division.getDivisionID());
+            stmt.setInt(7, this.customerID);
+
+            System.out.println(stmt);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error updating customer: " + e.getMessage());
+        }
+    }
 }

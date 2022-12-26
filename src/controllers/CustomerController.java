@@ -3,11 +3,9 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.Main;
 import models.Country;
 import models.Customer;
 import models.Division;
@@ -103,6 +101,61 @@ public class CustomerController implements Initializable {
 
     @FXML
     void cancelBtnHandler(ActionEvent event) throws IOException {
+        ApplicationController.selectedCustomer = null;
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        sceneHelper = new SceneHelper(stage);
+        sceneHelper.changeScene("/views/layout/index.fxml");
+    }
+
+    void validateForm(ActionEvent event) throws IOException {
+        if (customerName.getText().isEmpty()) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Name is required");
+        }
+        if (customerAddress.getText().isEmpty()) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Address is required");
+        }
+        if (customerPostalCode.getText().isEmpty()) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Postal Code is required");
+        }
+        if (phoneLabel.getText().isEmpty()) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Phone is required");
+        }
+        if (countryDropdown.getValue() == null) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Country is required");
+        }
+        if (divisionDropdown.getValue() == null) {
+            sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Division is required");
+        }
+    }
+
+    @FXML
+    void saveBtnHandler(ActionEvent event) throws IOException, SQLException {
+        validateForm(event);
+        if (ApplicationController.selectedCustomer == null) {
+            Customer newCustomer = new Customer(
+                    customerName.getText(),
+                    customerAddress.getText(),
+                    customerPostalCode.getText(),
+                    phoneLabel.getText(),
+                    Main.getCurrentUser().getUserName(),
+                    Main.getCurrentUser().getUserName(),
+                    divisionDropdown.getValue()
+            );
+            newCustomer.create();
+        } else {
+            Customer existingCustomer = new Customer(
+                    Integer.parseInt(customerId.getText()),
+                    customerName.getText(),
+                    customerAddress.getText(),
+                    customerPostalCode.getText(),
+                    phoneLabel.getText(),
+                    Main.getCurrentUser().getUserName(),
+                    divisionDropdown.getValue()
+            );
+            existingCustomer.update();
+        }
+
         ApplicationController.selectedCustomer = null;
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 

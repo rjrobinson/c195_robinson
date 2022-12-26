@@ -24,12 +24,12 @@
         <Label layoutX="13.0" layoutY="160.0" prefHeight="28.0" prefWidth="130.0" text="Postal Code" />
         <TextField fx:id="customerPostalCode" layoutX="159.0" layoutY="161.0" prefHeight="26.0" prefWidth="138.0" />
         <TextField fx:id="phoneLabel" layoutX="157.0" layoutY="233.0" prefHeight="26.0" prefWidth="146.0" />
-        <ComboBox fx:id="countryDropdown" layoutX="158.0" layoutY="197.0" prefHeight="26.0" prefWidth="138.0" />
+        <ComboBox fx:id="countryDropdown" layoutX="158.0" layoutY="197.0" onAction="#populateDivisionDropdown" prefHeight="26.0" prefWidth="138.0" />
         <Label layoutX="16.0" layoutY="197.0" prefHeight="28.0" prefWidth="105.0" text="Country" />
         <Label layoutX="318.0" layoutY="197.0" prefHeight="28.0" prefWidth="90.0" text="State/Province" />
-        <ComboBox fx:id="divisionDropdown" layoutX="408.0" layoutY="197.0" prefHeight="26.0" prefWidth="100.0" />
+        <ComboBox fx:id="divisionDropdown" disable="true" layoutX="408.0" layoutY="197.0" prefHeight="26.0" prefWidth="100.0" />
         <Label layoutX="19.0" layoutY="232.0" prefHeight="28.0" prefWidth="100.0" text="Phone" />
-        <Button fx:id="saveBtn" layoutX="397.0" layoutY="261.0" mnemonicParsing="false" text="Save" />
+        <Button fx:id="saveBtn" layoutX="397.0" layoutY="261.0" mnemonicParsing="false" onAction="#saveBtnHandler" text="Save" />
         <Button fx:id="cancelBtn" layoutX="452.0" layoutY="261.0" mnemonicParsing="false" onAction="#cancelBtnHandler" text="Cancel" />
     </children>
 </AnchorPane>

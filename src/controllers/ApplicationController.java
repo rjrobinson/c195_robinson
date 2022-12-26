@@ -172,12 +172,10 @@ public class ApplicationController implements Initializable {
     }
 
 
-
     @FXML
     public void newCustomerHandler(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         SceneHelper sceneHelper = new SceneHelper(stage);
-
         sceneHelper.changeScene("/views/customers/_form.fxml");
     }
 
@@ -277,6 +275,7 @@ public class ApplicationController implements Initializable {
             sceneHelper.changeScene("/views/customers/_form.fxml");
         }
     }
+
     /**
      * logout button handler.
      *
