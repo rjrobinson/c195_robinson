@@ -1,12 +1,14 @@
 package models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import main.Main;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-public class User extends Base {
+import static models.Base.conn;
+public class User {
     private int userId;
     private String userName;
     private String password;
@@ -82,5 +84,34 @@ public class User extends Base {
         }
 
         return false;
+    }
+
+
+    private static ObservableList<User> allUsers = FXCollections.observableArrayList();
+    public static ObservableList<User> getAllUsers() throws SQLException {
+        allUsers.clear();
+
+        PreparedStatement stmt = conn.prepareStatement(
+                "SELECT * FROM users"
+        );
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            User user = new User(
+                    rs.getInt("user_id"),
+                    rs.getString("user_name")
+
+            );
+
+            allUsers.add(user);
+        }
+        return allUsers;
+    }
+
+    public static ObservableList<String> getUserNames() throws SQLException {
+        ObservableList<String> userNames = FXCollections.observableArrayList();
+
+        getAllUsers().forEach(user -> userNames.add(user.getUserName()));
+        return userNames;
     }
 }

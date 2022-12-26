@@ -33,6 +33,8 @@ public class ApplicationController implements Initializable {
     private Button apptDeleteBtn;
 
     @FXML
+    private Button apptUpdateBtn;
+    @FXML
     private TableColumn<Appointment, String> apptDescription;
 
     @FXML
@@ -171,6 +173,10 @@ public class ApplicationController implements Initializable {
 
     }
 
+    @FXML
+    void appointmentUpdateHandler(ActionEvent event) {
+
+    }
 
     @FXML
     public void newCustomerHandler(ActionEvent event) throws IOException {
@@ -275,6 +281,42 @@ public class ApplicationController implements Initializable {
             sceneHelper.changeScene("/views/customers/_form.fxml");
         }
     }
+
+    /**
+     * Update Appt handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void updateApptHandler(ActionEvent event) throws IOException {
+        selectedAppointment = apptTable.getSelectionModel().getSelectedItem();
+
+        if (Objects.isNull(selectedAppointment)) {
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Please select a appointment to modify.");
+        } else {
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            SceneHelper sceneHelper = new SceneHelper(stage);
+            sceneHelper.changeScene("/views/appointments/_form.fxml");
+        }
+    }
+
+
+    /**
+     * New Appt handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
+    @FXML
+    void newApptHandler(ActionEvent event) throws IOException {
+        selectedAppointment = null;
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        SceneHelper sceneHelper = new SceneHelper(stage);
+        sceneHelper.changeScene("/views/appointments/_form.fxml");
+
+    }
+
 
     /**
      * logout button handler.

@@ -87,6 +87,14 @@ public class Customer {
         return allCustomers;
     }
 
+    public static ObservableList<String> getCustomerNames() throws SQLException {
+        ObservableList<String> customerNames = FXCollections.observableArrayList();
+
+        getAllCustomers().forEach(customer -> customerNames.add(customer.getCustomerName()));
+        return customerNames;
+    }
+
+
     public static void deleteCustomer(int customerID) {
 
         try {

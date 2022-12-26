@@ -44,9 +44,10 @@
             </columns>
         </TableView>
         <Label layoutX="28.0" layoutY="726.0" text="Appointment Options" />
-        <Button fx:id="apptDeleteBtn" layoutX="115.0" layoutY="756.0" mnemonicParsing="false" onAction="#appointmentDeleteHandler" prefHeight="26.0" prefWidth="79.0" text="Delete" />
-        <Button fx:id="apptNewBtn" layoutX="26.0" layoutY="756.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="79.0" text="New" />
+        <Button fx:id="apptDeleteBtn" layoutX="205.0" layoutY="756.0" mnemonicParsing="false" onAction="#appointmentDeleteHandler" prefHeight="26.0" prefWidth="79.0" text="Delete" />
+        <Button fx:id="apptNewBtn" layoutX="26.0" layoutY="756.0" mnemonicParsing="false" onAction="#newApptHandler" prefHeight="26.0" prefWidth="79.0" text="New" />
         <Button fx:id="reportsBtn" layoutX="657.0" layoutY="743.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="152.0" text="Reports" />
+      <Button fx:id="apptUpdateBtn" layoutX="115.0" layoutY="756.0" mnemonicParsing="false" onAction="#updateApptHandler" prefHeight="26.0" prefWidth="79.0" text="Update" />
     </children>
 
 </AnchorPane>
