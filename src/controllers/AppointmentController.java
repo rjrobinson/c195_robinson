@@ -138,6 +138,8 @@ public class AppointmentController implements Initializable {
 
     @FXML
     void saveBtnHandler(ActionEvent event) throws IOException, SQLException {
+        Boolean valid = validateForm();
+
         String title = apptTitle.getText();
         String description = apptDescription.getText();
         String location = apptLocation.getText();
@@ -154,19 +156,106 @@ public class AppointmentController implements Initializable {
         int userID = User.getUserID(userName);
         int contactID = Contact.getContactID(contactName);
 
-        if (ApplicationController.selectedAppointment == null) {
-            //             THIS IS FOR NEW FORM
-            Appointment.createAppointment(title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+        if (valid) {
+            if (ApplicationController.selectedAppointment == null) {
+                Appointment.createAppointment(title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+            } else {
+                int appointmentID = Integer.parseInt(apptID.getText());
+                Appointment.updateAppointment(appointmentID, title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+            }
+
+            ApplicationController.selectedCustomer = null;
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+            SceneHelper sceneHelper = new SceneHelper(stage);
+            sceneHelper.changeScene("/views/layout/index.fxml");
         } else {
-            //             THIS IS FOR EDIT FORM
-            int appointmentID = Integer.parseInt(apptID.getText());
-//            Appointment.updateAppointment(appointmentID, title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Something went wrong.");
+        }
+    }
+
+    public Boolean validateForm() throws IOException {
+        Boolean valid = true;
+        try {
+
+
+            if (apptTitle.getText().isEmpty()) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a title.");
+            }
+
+            if (apptDescription.getText().isEmpty()) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a description.");
+            }
+
+            if (apptLocation.getText().isEmpty()) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a location.");
+            }
+
+            if (apptType.getText().isEmpty()) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a type.");
+            }
+
+            if (startDateCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start date.");
+            }
+
+            if (startTimeCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time.");
+            }
+
+            if (endDateCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter an end date.");
+            }
+
+            if (endTimeCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter an end time.");
+            }
+
+            if (customerCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a customer.");
+            }
+
+            if (userCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a user.");
+            }
+
+            if (contactCombo.getValue() == null) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a contact.");
+            }
+
+            if (startTimeCombo.getValue().compareTo(endTimeCombo.getValue()) > 0) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is before the end time.");
+            }
+
+            if (startDateCombo.getValue().isAfter(endDateCombo.getValue())) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start date that is before the end date.");
+            }
+
+            if (startDateCombo.getValue().isEqual(endDateCombo.getValue())) {
+                if (startTimeCombo.getValue().compareTo(endTimeCombo.getValue()) > 0) {
+                    valid = false;
+                    SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is before the end time.");
+                }
+            }
+        } catch (Exception e) {
+            valid = false;
+            SceneHelper.displayAlert(Alert.AlertType.ERROR, "Unknown Error");
         }
 
-        ApplicationController.selectedCustomer = null;
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 
-        SceneHelper sceneHelper = new SceneHelper(stage);
-        sceneHelper.changeScene("/views/layout/index.fxml");
+        return valid;
     }
 }

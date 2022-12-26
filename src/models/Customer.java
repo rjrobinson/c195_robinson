@@ -126,11 +126,19 @@ public class Customer {
     }
 
     public static int getCustomerID(String customerName) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT customer_id FROM customers WHERE customer_name = ?");
-        stmt.setString(1, customerName);
-        ResultSet rs = stmt.executeQuery();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT customer_id FROM customers WHERE customer_name = ?");
+            stmt.setString(1, customerName);
 
-        return rs.getInt("customer_id");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("customer_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error getting customer ID: " + e.getMessage());
+        }
+        return 0;
     }
 
     public void setCustomerID(int customerID) {

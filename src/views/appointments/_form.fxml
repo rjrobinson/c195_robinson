@@ -53,7 +53,7 @@
             <ComboBox fx:id="userCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <ComboBox fx:id="customerCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#cancelBtnHandler" prefHeight="26.0" prefWidth="174.0" text="Cancel" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-            <Button fx:id="saveBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="151.0" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <Button fx:id="saveBtn" alignment="CENTER" mnemonicParsing="false" onAction="#saveBtnHandler" prefHeight="26.0" prefWidth="151.0" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="10" />
             <DatePicker fx:id="startDateCombo" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <DatePicker fx:id="endDateCombo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ComboBox fx:id="startTimeCombo" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />

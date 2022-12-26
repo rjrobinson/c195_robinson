@@ -133,10 +133,8 @@ public class Appointment {
     }
 
     public static void createAppointment(String title, String description, String location, String type, String startDate, String startTime, String endDate, String endTime, int customerID, int userID, int contactID) {
-
-
-        //        TODO: Transform Data to UTC
-        //         TODO: Validate Data
+        String startDateUtc = Utility.utcForDatabase(startDate, startTime);
+        String endDateUtc = Utility.utcForDatabase(endDate, endTime);
 
         try {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?)");
@@ -144,8 +142,8 @@ public class Appointment {
             stmt.setString(2, description);
             stmt.setString(3, location);
             stmt.setString(4, type);
-            stmt.setString(5, startDate + " " + startTime);
-            stmt.setString(6, endDate + " " + endTime);
+            stmt.setString(5, startDateUtc);
+            stmt.setString(6, endDateUtc);
             stmt.setString(7, Main.getCurrentUser().getUserName());
             stmt.setString(8, Main.getCurrentUser().getUserName());
             stmt.setInt(9, customerID);
@@ -154,6 +152,29 @@ public class Appointment {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error creating appointment: " + e.getMessage());
+        }
+    }
+
+    public static void updateAppointment(int appointmentID, String title, String description, String location, String type, String startDate, String startTime, String endDate, String endTime, int customerID, int userID, int contactID) {
+        String startDateUtc = Utility.utcForDatabase(startDate, startTime);
+        String endDateUtc = Utility.utcForDatabase(endDate, endTime);
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?");
+            stmt.setString(1, title);
+            stmt.setString(2, description);
+            stmt.setString(3, location);
+            stmt.setString(4, type);
+            stmt.setString(5, startDateUtc);
+            stmt.setString(6, endDateUtc);
+            stmt.setString(7, Main.getCurrentUser().getUserName());
+            stmt.setInt(8, customerID);
+            stmt.setInt(9, userID);
+            stmt.setInt(10, contactID);
+            stmt.setInt(11, appointmentID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error updating appointment: " + e.getMessage());
         }
     }
 

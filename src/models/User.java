@@ -40,7 +40,10 @@ public class User {
         PreparedStatement stmt = conn.prepareStatement("SELECT user_id FROM users WHERE users.user_name = ?");
         stmt.setString(1, userName);
         ResultSet rs = stmt.executeQuery();
-        return rs.getInt("user_id");
+        if (rs.next()) {
+            return rs.getInt("user_id");
+        }
+        return 0;
     }
 
     public int getUserId() {

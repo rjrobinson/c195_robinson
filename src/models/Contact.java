@@ -28,9 +28,12 @@ public class Contact {
         PreparedStatement stmt = conn.prepareStatement("SELECT Contact_ID FROM contacts WHERE Contact_Name = ?");
         stmt.setString(1, contactName);
         ResultSet rs = stmt.executeQuery();
-
-        return rs.getInt("Contact_ID");
+        if (rs.next()) {
+            return rs.getInt("Contact_ID");
+        }
+        return 0;
     }
+
     public String getContactName() {
         return contactName;
     }
