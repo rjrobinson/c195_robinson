@@ -125,6 +125,14 @@ public class Customer {
         return customerID;
     }
 
+    public static int getCustomerID(String customerName) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT customer_id FROM customers WHERE customer_name = ?");
+        stmt.setString(1, customerName);
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.getInt("customer_id");
+    }
+
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }

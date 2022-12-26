@@ -7,7 +7,9 @@ import main.Main;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static models.Base.conn;
+
 public class User {
     private int userId;
     private String userName;
@@ -32,6 +34,13 @@ public class User {
     public User(int userId, String userName) {
         this.userId = userId;
         this.userName = userName;
+    }
+
+    public static int getUserID(String userName) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT user_id FROM users WHERE users.user_name = ?");
+        stmt.setString(1, userName);
+        ResultSet rs = stmt.executeQuery();
+        return rs.getInt("user_id");
     }
 
     public int getUserId() {
@@ -88,6 +97,7 @@ public class User {
 
 
     private static ObservableList<User> allUsers = FXCollections.observableArrayList();
+
     public static ObservableList<User> getAllUsers() throws SQLException {
         allUsers.clear();
 

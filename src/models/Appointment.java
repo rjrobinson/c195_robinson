@@ -2,6 +2,8 @@ package models;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.Main;
+import support.Utility;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,6 +63,11 @@ public class Appointment {
 
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
+            String startTime = rs.getString("start");
+            String startTimeLocal = Utility.toLocal(startTime);
+            String endTime = rs.getString("end");
+            String endTimeLocal = Utility.toLocal(endTime);
+
             Appointment appt = new Appointment(
                     rs.getInt("Appointment_ID"),
                     rs.getString("Title"),
@@ -76,10 +83,10 @@ public class Appointment {
                     rs.getString("Contact_Name"),
                     rs.getString("Customer_Name"),
                     rs.getString("User_Name"),
-                    rs.getString("startDate"),
-                    rs.getString("startTime"),
-                    rs.getString("endDate"),
-                    rs.getString("endTime")
+                    startTimeLocal.substring(0, 10),
+                    startTimeLocal.substring(11, 16),
+                    endTimeLocal.substring(0, 10),
+                    endTimeLocal.substring(11, 16)
             );
             allAppointments.add(appt);
         }
@@ -97,6 +104,7 @@ public class Appointment {
             System.out.println("Error deleting appointment: " + e.getMessage());
         }
     }
+
     public static String allApptSql() {
         return """
                  SELECT    a.appointment_id,
@@ -107,8 +115,8 @@ public class Appointment {
                            a.description,
                            a.type,
                            a.location,
-                           a.start,
-                           a.end,
+                           date_format(a.start, '%Y-%m-%dT%H:%i:%sZ') as start,
+                           date_format(a.end, '%Y-%m-%dT%H:%i:%sZ') as end,
                            a.create_date,
                            a.created_by,
                            a.last_update,
@@ -122,6 +130,31 @@ public class Appointment {
                          INNER JOIN users AS u ON a.user_id = u.user_id
                          INNER JOIN contacts AS co ON a.contact_id = co.contact_id
                                 """;
+    }
+
+    public static void createAppointment(String title, String description, String location, String type, String startDate, String startTime, String endDate, String endTime, int customerID, int userID, int contactID) {
+
+
+        //        TODO: Transform Data to UTC
+        //         TODO: Validate Data
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, ?, ?, ?)");
+            stmt.setString(1, title);
+            stmt.setString(2, description);
+            stmt.setString(3, location);
+            stmt.setString(4, type);
+            stmt.setString(5, startDate + " " + startTime);
+            stmt.setString(6, endDate + " " + endTime);
+            stmt.setString(7, Main.getCurrentUser().getUserName());
+            stmt.setString(8, Main.getCurrentUser().getUserName());
+            stmt.setInt(9, customerID);
+            stmt.setInt(10, userID);
+            stmt.setInt(11, contactID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error creating appointment: " + e.getMessage());
+        }
     }
 
     //getters and setters

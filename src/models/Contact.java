@@ -24,6 +24,13 @@ public class Contact {
         return contactID;
     }
 
+    public static int getContactID(String contactName) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT Contact_ID FROM contacts WHERE Contact_Name = ?");
+        stmt.setString(1, contactName);
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.getInt("Contact_ID");
+    }
     public String getContactName() {
         return contactName;
     }

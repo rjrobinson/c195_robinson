@@ -135,4 +135,38 @@ public class AppointmentController implements Initializable {
         SceneHelper sceneHelper = new SceneHelper(stage);
         sceneHelper.changeScene("/views/layout/index.fxml");
     }
+
+    @FXML
+    void saveBtnHandler(ActionEvent event) throws IOException, SQLException {
+        String title = apptTitle.getText();
+        String description = apptDescription.getText();
+        String location = apptLocation.getText();
+        String type = apptType.getText();
+        String startDate = startDateCombo.getValue().toString();
+        String startTime = startTimeCombo.getValue();
+        String endDate = endDateCombo.getValue().toString();
+        String endTime = endTimeCombo.getValue();
+        String customerName = customerCombo.getValue();
+        String userName = userCombo.getValue();
+        String contactName = contactCombo.getValue();
+
+        int customerID = Customer.getCustomerID(customerName);
+        int userID = User.getUserID(userName);
+        int contactID = Contact.getContactID(contactName);
+
+        if (ApplicationController.selectedAppointment == null) {
+            //             THIS IS FOR NEW FORM
+            Appointment.createAppointment(title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+        } else {
+            //             THIS IS FOR EDIT FORM
+            int appointmentID = Integer.parseInt(apptID.getText());
+//            Appointment.updateAppointment(appointmentID, title, description, location, type, startDate, startTime, endDate, endTime, customerID, userID, contactID);
+        }
+
+        ApplicationController.selectedCustomer = null;
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        SceneHelper sceneHelper = new SceneHelper(stage);
+        sceneHelper.changeScene("/views/layout/index.fxml");
+    }
 }
