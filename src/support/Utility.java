@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Utility {
 
@@ -15,13 +16,27 @@ public class Utility {
         return ldtZoned.withZoneSameInstant(ZoneId.of("UTC")).toString();
     }
 
+    public static String toLocal(String utcTime) {
+        Instant instant = Instant.parse(utcTime);
 
-    public static String toLocal(String time) {
-        time = time.replace(" ", "T");
-        Instant timestamp = Instant.parse(time);
-        ZonedDateTime ldt = timestamp.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
+        ZoneId systemZone = ZoneId.systemDefault();
 
-        return ldt.toString();
+        return instant.atZone(systemZone).toLocalDateTime().toString();
+    }
+
+    public static LocalDateTime toEST(String utcTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localUtcTime = LocalDateTime.parse(utcTime, formatter);
+        ZoneId estZone = ZoneId.of("America/New_York");
+        ZonedDateTime zonedUtcTime = localUtcTime.atZone(ZoneId.of("UTC"));
+
+        return zonedUtcTime.withZoneSameInstant(estZone).toLocalDateTime();
+    }
+
+    public static String utcForDatabase(LocalDateTime time) {
+         time = time.atZone(ZoneId.of("UTC")).toLocalDateTime();
+
+        return time.toString().replace("T", " ");
     }
 
     public static String utcForDatabase(String startDate, String startTime) {
@@ -32,4 +47,18 @@ public class Utility {
 
         return startDateUtc;
     }
+
+
+    public static boolean inBusinessHours(LocalDateTime time1, LocalDateTime time2) {
+        ZoneId estZone = ZoneId.of("America/New_York");
+        ZonedDateTime zonedTime1 = time1.atZone(estZone);
+        ZonedDateTime zonedTime2 = time2.atZone(estZone);
+        LocalDateTime startOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 8, 0);
+        LocalDateTime endOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 22, 0);
+        ZonedDateTime zonedStartOfBusinessHours = startOfBusinessHours.atZone(estZone);
+        ZonedDateTime zonedEndOfBusinessHours = endOfBusinessHours.atZone(estZone);
+
+        return zonedTime1.isAfter(zonedStartOfBusinessHours) && zonedTime1.isBefore(zonedEndOfBusinessHours) && zonedTime2.isAfter(zonedStartOfBusinessHours) && zonedTime2.isBefore(zonedEndOfBusinessHours);
+    }
+
 }

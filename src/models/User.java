@@ -46,7 +46,7 @@ public class User {
         return 0;
     }
 
-    public int getUserId() {
+    public int getUserID() {
         return userId;
     }
 
@@ -127,4 +127,5 @@ public class User {
         getAllUsers().forEach(user -> userNames.add(user.getUserName()));
         return userNames;
     }
+
 }

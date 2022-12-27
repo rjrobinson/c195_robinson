@@ -12,11 +12,13 @@ import models.Contact;
 import models.Customer;
 import models.User;
 import support.SceneHelper;
+import support.Utility;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class AppointmentController implements Initializable {
@@ -177,8 +179,6 @@ public class AppointmentController implements Initializable {
     public Boolean validateForm() throws IOException {
         Boolean valid = true;
         try {
-
-
             if (apptTitle.getText().isEmpty()) {
                 valid = false;
                 SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a title.");
@@ -234,28 +234,44 @@ public class AppointmentController implements Initializable {
                 SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a contact.");
             }
 
-            if (startTimeCombo.getValue().compareTo(endTimeCombo.getValue()) > 0) {
+            LocalDateTime startDateTime = LocalDateTime.parse(startDateCombo.getValue() + "T" + startTimeCombo.getValue());
+            LocalDateTime endDateTime = LocalDateTime.parse(endDateCombo.getValue() + "T" + endTimeCombo.getValue());
+
+            System.out.println(startDateTime);
+            System.out.println(endDateTime);
+
+            if (startDateTime.isAfter(endDateTime)) {
                 valid = false;
-                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is before the end time.");
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Start date/time must be before end date/time.");
             }
 
-            if (startDateCombo.getValue().isAfter(endDateCombo.getValue())) {
+            if (startDateTime.isEqual(endDateTime)) {
                 valid = false;
-                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start date that is before the end date.");
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Start date/time must be before end date/time.");
             }
 
-            if (startDateCombo.getValue().isEqual(endDateCombo.getValue())) {
-                if (startTimeCombo.getValue().compareTo(endTimeCombo.getValue()) > 0) {
-                    valid = false;
-                    SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is before the end time.");
-                }
+            if (!Utility.inBusinessHours(startDateTime, endDateTime)) {
+                System.out.println("Validating business hours");
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is between 8:00 AM and 10:00 PM.");
             }
+            String apptIDString = apptID.getText();
+            if (apptIDString.isEmpty()) {
+                apptIDString = "0";
+            }
+            if (Boolean.TRUE.equals(Appointment.appointmentOverlaps(startDateTime, endDateTime, apptIDString))) {
+                valid = false;
+                SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that does not overlap with another appointment.");
+            }
+
         } catch (Exception e) {
             valid = false;
+            System.out.println(e.getMessage());
             SceneHelper.displayAlert(Alert.AlertType.ERROR, "Unknown Error");
         }
 
 
         return valid;
     }
+
 }

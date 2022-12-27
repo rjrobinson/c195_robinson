@@ -5,9 +5,11 @@ import javafx.collections.ObservableList;
 import main.Main;
 import support.Utility;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static models.Base.conn;
 
@@ -64,8 +66,9 @@ public class Appointment {
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             String startTime = rs.getString("start");
-            String startTimeLocal = Utility.toLocal(startTime);
             String endTime = rs.getString("end");
+
+            String startTimeLocal = Utility.toLocal(startTime);
             String endTimeLocal = Utility.toLocal(endTime);
 
             Appointment appt = new Appointment(
@@ -324,4 +327,29 @@ public class Appointment {
     }
 
 
+    public static Boolean appointmentOverlaps(LocalDateTime start, LocalDateTime end, String excludeID) throws IOException, SQLException {
+        Boolean hasOverlaps = false;
+        int overlaps = 0;
+
+        PreparedStatement stmt = conn.prepareStatement("SELECT EXISTS (SELECT 1 FROM appointments WHERE user_id = ? AND appointment_id != ? AND ((? BETWEEN start AND end)OR (? BETWEEN start AND end))) AS overlaps");
+        stmt.setInt(1, Main.getCurrentUser().getUserID());
+        stmt.setInt(2, Integer.parseInt(excludeID));
+
+        String startUtc = Utility.utcForDatabase(start);
+        String endUtc = Utility.utcForDatabase(end);
+
+        stmt.setString(3, startUtc);
+        stmt.setString(4, endUtc);
+
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            overlaps = rs.getInt("overlaps");
+        }
+         if (overlaps == 1) {
+            hasOverlaps = true;
+         }
+
+        return hasOverlaps;
+    }
 }

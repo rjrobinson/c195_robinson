@@ -244,7 +244,7 @@ public class ApplicationController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Alert: You are about to delete this");
-            alert.setContentText("Do you want to delete the selected appointment?");
+            alert.setContentText("Do you want to delete the selected appointment with an ID: " + selectedAppointment.getAppointmentID() + "?");
 
             Optional<ButtonType> result = alert.showAndWait();
 
