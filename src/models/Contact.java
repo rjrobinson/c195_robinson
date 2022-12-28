@@ -34,6 +34,37 @@ public class Contact {
         return 0;
     }
 
+
+    public static Contact find(String contactName) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT Contact_ID, Contact_Name, Email FROM contacts WHERE Contact_Name = ?");
+        stmt.setString(1, contactName);
+        ResultSet rs = stmt.executeQuery();
+
+        return buildContact(rs);
+    }
+
+    public static Contact find(int contactID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT Contact_ID, Contact_Name, Email FROM contacts WHERE Contact_ID = ?");
+        stmt.setInt(1, contactID);
+        ResultSet rs = stmt.executeQuery();
+
+        return buildContact(rs);
+    }
+
+    private static Contact buildContact(ResultSet rs) throws SQLException {
+        Contact contact = null;
+        if (rs.next()) {
+            contact = new Contact(
+                    rs.getInt("contact_Id"),
+                    rs.getString("contact_Name"),
+                    rs.getString("email")
+            );
+        }
+        return contact;
+    }
+
+
+
     public String getContactName() {
         return contactName;
     }

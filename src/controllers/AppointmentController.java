@@ -19,7 +19,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AppointmentController implements Initializable {
@@ -155,9 +154,9 @@ public class AppointmentController implements Initializable {
         String userName = userCombo.getValue();
         String contactName = contactCombo.getValue();
 
-        int customerID = Objects.requireNonNull(Customer.find(customerName)).getCustomerID();
-        int userID = User.getUserID(userName);
-        int contactID = Contact.getContactID(contactName);
+        int customerID = Customer.find(customerName).getCustomerID();
+        int userID = User.find(userName).getUserID();
+        int contactID = Contact.find(contactName).getContactID();
 
         if (valid) {
             if (ApplicationController.selectedAppointment == null) {
@@ -257,7 +256,7 @@ public class AppointmentController implements Initializable {
                 SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that is between 8:00 AM and 10:00 PM.");
             }
             String apptIDString = apptID.getText();
-            if (apptIDString.isEmpty()) {
+            if (apptIDString.equals("Auto-Generated")) {
                 apptIDString = "0";
             }
 

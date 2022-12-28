@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import main.Main;
 import models.Appointment;
 import models.Customer;
 import support.SceneHelper;
@@ -130,6 +131,17 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         sceneHelper = new SceneHelper(stage);
+
+        if (Main.fresh) {
+            try {
+                Appointment.checkForSoonAppointments(Main.getCurrentUser().getUserID());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            Main.fresh = false;
+        }
 
         try {
             allCustomers = Customer.getAllCustomers();

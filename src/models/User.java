@@ -46,6 +46,33 @@ public class User {
         return 0;
     }
 
+    public static User find(String userName) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT user_id, User_Name FROM users WHERE users.user_name = ?");
+        stmt.setString(1, userName);
+        ResultSet rs = stmt.executeQuery();
+
+        return buildUser(rs);
+    }
+
+    public static User find(int userID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT user_id, User_Name FROM users WHERE users.user_id = ?");
+        stmt.setInt(1, userID);
+        ResultSet rs = stmt.executeQuery();
+
+        return buildUser(rs);
+    }
+
+    private static User buildUser(ResultSet rs) throws SQLException {
+        User user = null;
+        if (rs.next()) {
+            user = new User(
+                    rs.getInt("user_Id"),
+                    rs.getString("User_Name")
+            );
+        }
+        return user;
+    }
+
     public int getUserID() {
         return userId;
     }

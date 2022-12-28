@@ -55,6 +55,7 @@ public class Main extends Application {
         launch(args);
     }
 
+    public static Boolean fresh = true;
     @Override
     public void start(Stage primaryStage) throws java.io.IOException, SQLException {
 //        Locale.setDefault(new Locale("fr"));

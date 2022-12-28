@@ -2,7 +2,9 @@ package models;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import main.Main;
+import support.SceneHelper;
 import support.Utility;
 
 import java.io.IOException;
@@ -183,6 +185,16 @@ public class Appointment {
         }
     }
 
+    public static void checkForSoonAppointments(int userID) throws IOException, SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN UTC_TIMESTAMP() AND DATE_ADD(UTC_TIMESTAMP(), INTERVAL 15 MINUTE);");
+        stmt.setInt(1, userID);
+        ResultSet rs = stmt.executeQuery();
+
+        while(rs.next()) {
+            SceneHelper.displayAlert(Alert.AlertType.INFORMATION, "Appointment Alert, You have an appointment coming up soon!");
+        }
+    }
+
     //getters and setters
     public int getAppointmentID() {
         return appointmentID;
@@ -203,8 +215,6 @@ public class Appointment {
     public String getType() {
         return type;
     }
-
-}
 
     public String getStart() {
         return start;
