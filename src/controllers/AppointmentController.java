@@ -19,6 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AppointmentController implements Initializable {
@@ -154,7 +155,7 @@ public class AppointmentController implements Initializable {
         String userName = userCombo.getValue();
         String contactName = contactCombo.getValue();
 
-        int customerID = Customer.getCustomerID(customerName);
+        int customerID = Objects.requireNonNull(Customer.find(customerName)).getCustomerID();
         int userID = User.getUserID(userName);
         int contactID = Contact.getContactID(contactName);
 
@@ -259,7 +260,11 @@ public class AppointmentController implements Initializable {
             if (apptIDString.isEmpty()) {
                 apptIDString = "0";
             }
-            if (Boolean.TRUE.equals(Appointment.appointmentOverlaps(startDateTime, endDateTime, apptIDString))) {
+
+            Customer customer = Customer.find(customerCombo.getValue());
+
+            assert customer != null;
+            if (Boolean.TRUE.equals(Appointment.appointmentOverlaps(startDateTime, endDateTime, apptIDString, customer.getCustomerID()))) {
                 valid = false;
                 SceneHelper.displayAlert(Alert.AlertType.ERROR, "Error Please enter a start time that does not overlap with another appointment.");
             }

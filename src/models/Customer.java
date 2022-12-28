@@ -21,6 +21,11 @@ public class Customer {
     private String lastUpdate;
     private String lastUpdatedBy;
     private String divisionName;
+
+    private Division division;
+
+    private Country country;
+
     private String countryName;
 
     public Customer(int customerID, String customerName, String address, String postalCode, String phone, String createdBy, String createDate, String lastUpdate, String lastUpdatedBy, String divisionName, String countryName) {
@@ -112,11 +117,6 @@ public class Customer {
         }
     }
 
-
-    public String formattedAddress() {
-        return address + ", " + divisionName;
-    }
-
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
@@ -125,20 +125,63 @@ public class Customer {
         return customerID;
     }
 
-    public static int getCustomerID(String customerName) throws SQLException {
+    public static Customer find(String customerName) throws SQLException {
         try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT customer_id FROM customers WHERE customer_name = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division, co.country FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID JOIN countries AS co ON d.Country_ID = co.Country_ID WHERE customer_name = ?");
             stmt.setString(1, customerName);
+            Customer customer;
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("customer_id");
+                customer = new Customer(
+                        rs.getInt("Customer_ID"),
+                        rs.getString("Customer_Name"),
+                        rs.getString("Address"),
+                        rs.getString("Postal_Code"),
+                        rs.getString("Phone"),
+                        rs.getString("Created_By"),
+                        rs.getString("Create_Date"),
+                        rs.getString("Last_Update"),
+                        rs.getString("Last_Updated_By"),
+                        rs.getString("Division"),
+                        rs.getString("country")
+                );
+                return customer;
             }
 
         } catch (SQLException e) {
             System.out.println("Error getting customer ID: " + e.getMessage());
         }
-        return 0;
+        return null;
+    }
+    public static Customer find(int customerID) throws SQLException {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, c.Created_By, c.Create_Date, c.Last_Update, c.Last_Updated_By, d.Division, co.country FROM customers AS c JOIN first_level_divisions AS d ON c.Division_ID = d.Division_ID JOIN countries AS co ON d.Country_ID = co.Country_ID WHERE customer_ID = ?");
+            stmt.setInt(1, customerID);
+            Customer customer;
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer(
+                        rs.getInt("Customer_ID"),
+                        rs.getString("Customer_Name"),
+                        rs.getString("Address"),
+                        rs.getString("Postal_Code"),
+                        rs.getString("Phone"),
+                        rs.getString("Created_By"),
+                        rs.getString("Create_Date"),
+                        rs.getString("Last_Update"),
+                        rs.getString("Last_Updated_By"),
+                        rs.getString("Division"),
+                        rs.getString("country")
+                );
+                return customer;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error getting customer ID: " + e.getMessage());
+        }
+        return null;
     }
 
     public void setCustomerID(int customerID) {

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static models.Base.conn;
 
@@ -34,9 +35,10 @@ public class Appointment {
     private String contactName;
     private String customerName;
     private String userName;
+    private Customer customer;
 
     //constructor
-    public Appointment(int appointmentID, String title, String description, String location, String type, String start, String end, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, String contactName, String customerName, String userName, String startDate, String startTime, String endDate, String endTime) {
+    public Appointment(int appointmentID, String title, String description, String location, String type, String start, String end, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, String contactName, String customerName, String userName, String startDate, String startTime, String endDate, String endTime) throws SQLException {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -49,7 +51,7 @@ public class Appointment {
         this.lastUpdate = lastUpdate;
         this.lastUpdateBy = lastUpdateBy;
         this.contactName = contactName;
-        this.customerName = customerName;
+        this.customer = Customer.find(customerName);
         this.userName = userName;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -77,8 +79,8 @@ public class Appointment {
                     rs.getString("Description"),
                     rs.getString("Location"),
                     rs.getString("Type"),
-                    rs.getString("Start"),
-                    rs.getString("End"),
+                    startTimeLocal,
+                    endTimeLocal,
                     rs.getString("Create_Date"),
                     rs.getString("Created_By"),
                     rs.getString("Last_Update"),
@@ -186,76 +188,30 @@ public class Appointment {
         return appointmentID;
     }
 
-    public void setAppointmentID(int appointmentID) {
-        this.appointmentID = appointmentID;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getLocation() {
         return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+}
 
     public String getStart() {
         return start;
     }
 
-    public void setStart(String start) {
-        this.start = start;
-    }
-
     public String getEnd() {
         return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getLastUpdate() {
-        return lastUpdate;
     }
 
     public void setLastUpdate(String lastUpdate) {
@@ -264,10 +220,6 @@ public class Appointment {
 
     public String getLastUpdateBy() {
         return lastUpdateBy;
-    }
-
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy;
     }
 
     public String getStartDate() {
@@ -279,23 +231,11 @@ public class Appointment {
     }
 
     public String getCustomerName() {
-        return customerName;
+        return customer.getCustomerName();
     }
 
     public String getUserName() {
         return userName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getStartTime() {
@@ -310,46 +250,23 @@ public class Appointment {
         return endDate;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
+    public static Boolean appointmentOverlaps(LocalDateTime start, LocalDateTime end, String excludeID, int customerID) throws IOException, SQLException {
+        AtomicReference<Boolean> hasOverlaps = new AtomicReference<>(false);
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+        allAppointments = getAllAppointments();
+        //        Maybe change this to filtered ?
+        allAppointments.forEach(appointment -> {
+            if ((excludeID != null && appointment.getAppointmentID() == Integer.parseInt(excludeID) || customerID != appointment.customer.getCustomerID())) {
+                System.out.println("Skipping appointment " + appointment.getAppointmentID());
+            } else {
+                LocalDateTime appointmentStart = Utility.buildFromString(appointment.getStart().replace("T", " "));
+                LocalDateTime appointmentEnd = Utility.buildFromString(appointment.getEnd().replace("T", " "));
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-
-    public static Boolean appointmentOverlaps(LocalDateTime start, LocalDateTime end, String excludeID) throws IOException, SQLException {
-        Boolean hasOverlaps = false;
-        int overlaps = 0;
-
-        PreparedStatement stmt = conn.prepareStatement("SELECT EXISTS (SELECT 1 FROM appointments WHERE user_id = ? AND appointment_id != ? AND ((? BETWEEN start AND end)OR (? BETWEEN start AND end))) AS overlaps");
-        stmt.setInt(1, Main.getCurrentUser().getUserID());
-        stmt.setInt(2, Integer.parseInt(excludeID));
-
-        String startUtc = Utility.utcForDatabase(start);
-        String endUtc = Utility.utcForDatabase(end);
-
-        stmt.setString(3, startUtc);
-        stmt.setString(4, endUtc);
-
-
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            overlaps = rs.getInt("overlaps");
-        }
-         if (overlaps == 1) {
-            hasOverlaps = true;
-         }
-
-        return hasOverlaps;
+                if (Utility.isBetween(appointmentStart, appointmentEnd, start) || Utility.isBetween(appointmentStart, appointmentEnd, end)) {
+                    hasOverlaps.set(true);
+                }
+            }
+        });
+        return hasOverlaps.get();
     }
 }

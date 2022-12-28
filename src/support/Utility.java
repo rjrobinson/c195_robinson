@@ -53,12 +53,23 @@ public class Utility {
         ZoneId estZone = ZoneId.of("America/New_York");
         ZonedDateTime zonedTime1 = time1.atZone(estZone);
         ZonedDateTime zonedTime2 = time2.atZone(estZone);
-        LocalDateTime startOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 8, 0);
-        LocalDateTime endOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 22, 0);
+        LocalDateTime startOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 7, 59);
+        LocalDateTime endOfBusinessHours = LocalDateTime.of(zonedTime1.getYear(), zonedTime1.getMonth(), zonedTime1.getDayOfMonth(), 22, 01);
         ZonedDateTime zonedStartOfBusinessHours = startOfBusinessHours.atZone(estZone);
         ZonedDateTime zonedEndOfBusinessHours = endOfBusinessHours.atZone(estZone);
 
         return zonedTime1.isAfter(zonedStartOfBusinessHours) && zonedTime1.isBefore(zonedEndOfBusinessHours) && zonedTime2.isAfter(zonedStartOfBusinessHours) && zonedTime2.isBefore(zonedEndOfBusinessHours);
     }
 
+    public static boolean isBetween(LocalDateTime start, LocalDateTime end, LocalDateTime time) {
+        return (time.isAfter(start) || time.isEqual(start)) && (time.isBefore(end) || time.isEqual(end));
+    }
+
+
+    public static LocalDateTime buildFromString(String datetime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localTime = LocalDateTime.parse(datetime, formatter);
+
+        return localTime;
+    }
 }

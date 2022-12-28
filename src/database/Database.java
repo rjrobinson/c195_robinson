@@ -16,7 +16,8 @@ public class Database {
     public Database() {
         try {
             // Open a connection to the database
-            String url = DB_URL + DB_NAME;
+            String url = DB_URL + DB_NAME + "?connectionTimeZone=SERVER";
+
             conn = DriverManager.getConnection(url, USERNAME, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
