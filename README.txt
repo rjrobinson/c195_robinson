@@ -32,3 +32,8 @@ How to run the program
 When you run the Build program - you will be presented with a login screen. Please enter credentials and you will be properly authenticated.
 Once authenticated you will be presented with the main screen. From here you can view, edit, or delete customers and appointments.
 You can also review the reports located in the Tab menu.
+
+
+JavaDocs can be found here: 
+
+https://github.com/rjrobinson/c195_robinson/javadocs/index.html
