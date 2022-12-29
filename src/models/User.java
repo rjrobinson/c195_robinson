@@ -4,9 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.Main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static models.Base.conn;
 
@@ -119,9 +123,11 @@ public class User {
         if (rs.next()) {
             Main.setCurrentUser(new User(rs.getInt("user_id"), username));
             System.out.println("User logged in: " + username);
+
+            recordLoginAttempt(username, true);
             return true;
         }
-
+        recordLoginAttempt(username, false);
         return false;
     }
 
@@ -153,6 +159,22 @@ public class User {
 
         getAllUsers().forEach(user -> userNames.add(user.getUserName()));
         return userNames;
+    }
+
+    // File to store login activity
+    private static final String LOGIN_ACTIVITY_FILE = "login_activity.txt";
+
+    public static void recordLoginAttempt(String username, boolean success) {
+        LocalDateTime now = LocalDateTime.now();
+
+        String loginRecord = String.format("%s,%s,%s,%s", now.toLocalDate(),now.toLocalTime(), username, success);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(LOGIN_ACTIVITY_FILE, true))) {
+            bw.write(loginRecord);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

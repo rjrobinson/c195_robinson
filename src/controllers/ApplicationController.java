@@ -25,12 +25,16 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
+/**
+ * The Application controller. The main entry point into the application.
+ */
 public class ApplicationController implements Initializable {
 
     @FXML
     private TabPane tab;
     @FXML
     private Tab allApptTab;
+
     // By Week Table Items
     @FXML
     private TableColumn<Appointment, String> byWeekApptContact;
@@ -214,23 +218,50 @@ public class ApplicationController implements Initializable {
     @FXML
     private Button reportsBtn;
 
+    /**
+     * The All customers.
+     */
     @FXML
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    /**
+     * The All appointments.
+     */
     @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
+    /**
+     * The Appt by contact.
+     */
     @FXML
     public static ObservableList<Appointment> apptByContact = FXCollections.observableArrayList();
 
+    /**
+     * The By week appointments.
+     */
     @FXML
     public static ObservableList<Appointment> byWeekAppointments = FXCollections.observableArrayList();
+    /**
+     * The By month appointments.
+     */
     @FXML
     public static ObservableList<Appointment> byMonthAppointments = FXCollections.observableArrayList();
+    /**
+     * The Report 1.
+     */
     @FXML
     public static ObservableList<AppointmentReport> report1 = FXCollections.observableArrayList();
 
+    /**
+     * The Stage.
+     */
     public Stage stage;
+    /**
+     * The Scene.
+     */
     public Scene scene;
+    /**
+     * The Scene helper.
+     */
     SceneHelper sceneHelper;
 
 
@@ -393,6 +424,12 @@ public class ApplicationController implements Initializable {
 
     }
 
+    /**
+     * New customer handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
     @FXML
     public void newCustomerHandler(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -516,7 +553,6 @@ public class ApplicationController implements Initializable {
         }
     }
 
-
     /**
      * New Appt handler.
      *
@@ -544,6 +580,13 @@ public class ApplicationController implements Initializable {
         System.exit(0);
     }
 
+    /**
+     * Sets contact schedule.
+     *
+     * @param event the event
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     @FXML
     void setContactSchedule(ActionEvent event) throws IOException, SQLException {
         Contact contact = Contact.find(contactDropdown.getValue());
