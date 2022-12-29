@@ -587,7 +587,7 @@ public class ApplicationController implements Initializable {
      */
     @FXML
     void logout(ActionEvent event) throws IOException {
-        System.exit(0);
+        UserController.logoutHandler(stage);
     }
 
     /**

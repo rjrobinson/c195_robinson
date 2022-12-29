@@ -16,6 +16,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * The type Customer controller.
+ */
 public class CustomerController implements Initializable {
     @FXML
     private Button cancelBtn;
@@ -50,8 +53,19 @@ public class CustomerController implements Initializable {
     @FXML
     private Label formTitleLabel;
 
+    /**
+     * The Scene helper. A utility class that allows for quick scene changes
+     */
     SceneHelper sceneHelper;
 
+    /**
+     * Initialize.
+     *
+     * @param url            the url
+     * @param resourceBundle the resource bundle
+     *                       <p>
+     *                       Handles the Update and Create actions for Customers.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Customer selectedCustomer = ApplicationController.selectedCustomer;
@@ -89,6 +103,14 @@ public class CustomerController implements Initializable {
         }
     }
 
+    /**
+     * Populate division dropdown.
+     *
+     * @param event the event
+     *              Populates the division dropdown based on the selected country
+     *              in the country dropdown.
+     *              This is a listener for the country dropdown.
+     */
     @FXML
     void populateDivisionDropdown(ActionEvent event) {
         try {
@@ -99,6 +121,15 @@ public class CustomerController implements Initializable {
         }
     }
 
+    /**
+     * Cancel btn handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     *                     Handles the cancel button action.
+     *                     This will close the form and return to the main screen.
+     *                     This is a listener for the cancel button.
+     */
     @FXML
     void cancelBtnHandler(ActionEvent event) throws IOException {
         ApplicationController.selectedCustomer = null;
@@ -108,6 +139,14 @@ public class CustomerController implements Initializable {
         sceneHelper.changeScene("/views/layout/index.fxml");
     }
 
+    /**
+     * Validate form.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     *                     Validates the form and handles the save button action.
+     *                     Provides error messages if the form is not valid.
+     */
     void validateForm(ActionEvent event) throws IOException {
         if (customerName.getText().isEmpty()) {
             sceneHelper.displayAlert(Alert.AlertType.ERROR, "Customer Name is required");
@@ -129,6 +168,16 @@ public class CustomerController implements Initializable {
         }
     }
 
+    /**
+     * Save btn handler.
+     *
+     * @param event the event
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     *                      Handles the save button action.
+     *                      This will save the customer to the database and return to the main screen.
+     *                      This is a listener for the save button.
+     */
     @FXML
     void saveBtnHandler(ActionEvent event) throws IOException, SQLException {
         validateForm(event);
