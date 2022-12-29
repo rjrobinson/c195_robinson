@@ -21,6 +21,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/**
+ * The type Appointment controller. This controller is used for both adding and updating appointments.
+ */
 public class AppointmentController implements Initializable {
 
     @FXML
@@ -62,9 +65,21 @@ public class AppointmentController implements Initializable {
     @FXML
     private ComboBox<String> userCombo;
 
+    /**
+     * The Form title label.
+     */
     @FXML
     public Label formTitleLabel; // this is the label that says "New Appointment" or "Edit Appointment"
 
+
+    /**
+     * Initialize.
+     *
+     * @param url            the url
+     * @param resourceBundle the resource bundle
+     *
+     * Handles the Update and Create actions for Appointments.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Appointment selectedAppointment = ApplicationController.selectedAppointment;
@@ -117,8 +132,16 @@ public class AppointmentController implements Initializable {
     }
 
 
+    /**
+     * The constant timeList. Used in the forms where the time is partitioned into 15 minute intervals on a 24hour clock.
+     */
     public static final ObservableList<String> timeList = FXCollections.observableArrayList();
 
+    /**
+     * Populate time combo observable list.
+     *
+     * @return the observable list
+     */
     public ObservableList<String> populateTimeCombo() {
         for (int i = 0; i < 24; i++) {
             for (int j = 0; j < 60; j += 15) {
@@ -129,6 +152,12 @@ public class AppointmentController implements Initializable {
     }
 
 
+    /**
+     * Cancel btn handler.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
     @FXML
     void cancelBtnHandler(ActionEvent event) throws IOException {
         ApplicationController.selectedCustomer = null;
@@ -138,6 +167,17 @@ public class AppointmentController implements Initializable {
         sceneHelper.changeScene("/views/layout/index.fxml");
     }
 
+    /**
+     * Save btn handler.
+     *
+     * @param event the event
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     *
+     * The save button trigger form validation. If the form is valid, the appointment is saved to the database.
+     * If the form is invalid, the user is notified of the errors.
+     *
+     */
     @FXML
     void saveBtnHandler(ActionEvent event) throws IOException, SQLException {
         Boolean valid = validateForm();
@@ -176,6 +216,15 @@ public class AppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Validate form boolean.
+     *
+     * @return the boolean
+     * @throws IOException the io exception
+     *
+     * This form validates the form. It checks for empty fields, and checks for overlapping appointments.
+     * This validator also checks to ensure that the times are within business hours.
+     */
     public Boolean validateForm() throws IOException {
         Boolean valid = true;
         try {
