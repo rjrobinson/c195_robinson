@@ -34,6 +34,6 @@ Once authenticated you will be presented with the main screen. From here you can
 You can also review the reports located in the Tab menu.
 
 
-JavaDocs can be found here: 
+JavaDocs can be found here
 
-https://github.com/rjrobinson/c195_robinson/javadocs/index.html
+https://github.com/rjrobinson/c195_robinson/blob/4d7d4b4ccba46ce30226121d09a9beffbf098e6d/javadocs/index.html
