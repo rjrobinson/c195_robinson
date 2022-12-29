@@ -20,6 +20,9 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 
+/**
+ * The type Main.
+ */
 public class Main extends Application {
 
     private static User currentUser;
@@ -51,19 +54,25 @@ public class Main extends Application {
     @FXML
     private Label usernameLabel;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * The constant fresh. Used to help with notifications and alerts on initial login
+     */
     public static Boolean fresh = true;
     @Override
     public void start(Stage primaryStage) throws java.io.IOException, SQLException {
-//        Locale.setDefault(new Locale("fr"));
+        //        Locale.setDefault(new Locale("fr")); TESTING PURPOSES ONLY
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         try {
-//            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/users/login_page.fxml")), rb);
-            User.validateUser("test", "test");
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/layout/index.fxml")), rb);
 
             primaryStage.setTitle("WGU | SW2 | C195");
@@ -85,15 +94,31 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Logout.
+     *
+     * @param stage the stage
+     * @throws IOException the io exception
+     */
     @FXML
     public void logout(Stage stage) throws java.io.IOException {
         UserController.logoutHandler(stage);
     }
 
+    /**
+     * Gets current user.
+     *
+     * @return the current user
+     */
     public static User getCurrentUser() {
         return currentUser;
     }
 
+    /**
+     * Sets current user.
+     *
+     * @param user the user
+     */
     public static void setCurrentUser(User user) {
         currentUser = user;
     }

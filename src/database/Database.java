@@ -2,6 +2,9 @@ package database;
 
 import java.sql.*;
 
+/**
+ * The type Database.
+ */
 public class Database {
 
     // The database URL
@@ -13,6 +16,9 @@ public class Database {
     // The connection to the database
     private Connection conn;
 
+    /**
+     * Instantiates a new Connection to the Database.
+     */
     public Database() {
         try {
             // Open a connection to the database
@@ -24,7 +30,12 @@ public class Database {
         }
     }
 
-    // Returns the connection to the database
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     * Returns the connection to the database
+     */
     public Connection getConnection() {
         return conn;
     }

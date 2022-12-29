@@ -16,33 +16,81 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static models.Base.conn;
 
+/**
+ * The model Appointment.
+ */
 public class Appointment {
 
 
     public String period;
+
     private String createDate;
+
     private String createdBy;
+
     private String description;
+
     private String end;
+
     private String endDate;
+
     private String endTime;
+
     private String lastUpdate;
+
     private String lastUpdateBy;
+
     private String location;
+
     private String start;
+
     private String startDate;
+
     private String startTime;
+
     private String title;
+
     private String type;
+
     private int appointmentID;
+
     private String contactName;
+
     private String customerName;
+
     private String userName;
+
     private Customer customer;
+
     private Contact contact;
 
 
-    //constructor
+    /**
+     * Instantiates a new Appointment.
+     *
+     * @param appointmentID the appointment id
+     * @param title         the title
+     * @param description   the description
+     * @param location      the location
+     * @param type          the type
+     * @param start         the start
+     * @param end           the end
+     * @param createDate    the create date
+     * @param createdBy     the created by
+     * @param lastUpdate    the last update
+     * @param lastUpdateBy  the last update by
+     * @param contactName   the contact name
+     * @param customerName  the customer name
+     * @param userName      the user name
+     * @param startDate     the start date
+     * @param startTime     the start time
+     * @param endDate       the end date
+     * @param endTime       the end time
+     * @throws SQLException the sql exception
+     *                      <p>
+     *                      This constructor is used to create an appointment object from the database
+     */
+//constructor
     public Appointment(int appointmentID, String title, String description, String location, String type, String start, String end, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, String contactName, String customerName, String userName, String startDate, String startTime, String endDate, String endTime) throws SQLException {
         this.appointmentID = appointmentID;
         this.title = title;
@@ -65,6 +113,30 @@ public class Appointment {
         this.endTime = endTime;
     }
 
+    /**
+     * Instantiates a new Appointment.
+     *
+     * @param appointmentID the appointment id
+     * @param title         the title
+     * @param description   the description
+     * @param location      the location
+     * @param type          the type
+     * @param start         the start
+     * @param end           the end
+     * @param createDate    the create date
+     * @param createdBy     the created by
+     * @param lastUpdate    the last update
+     * @param lastUpdateBy  the last update by
+     * @param contactName   the contact name
+     * @param customerName  the customer name
+     * @param userName      the user name
+     * @param startDate     the start date
+     * @param startTime     the start time
+     * @param endDate       the end date
+     * @param endTime       the end time
+     * @param period        the period
+     * @throws SQLException the sql exception
+     */
     public Appointment(int appointmentID, String title, String description, String location, String type, String start, String end, String createDate, String createdBy, String lastUpdate, String lastUpdateBy, String contactName, String customerName, String userName, String startDate, String startTime, String endDate, String endTime, String period) throws SQLException {
         this.appointmentID = appointmentID;
         this.title = title;
@@ -87,12 +159,30 @@ public class Appointment {
         this.period = period;
     }
 
+    /**
+     * The All appointments.
+     */
     static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    /**
+     * The By week appointments.
+     */
     static ObservableList<Appointment> byWeekAppointments = FXCollections.observableArrayList();
+    /**
+     * The By month appointments.
+     */
     static ObservableList<Appointment> byMonthAppointments = FXCollections.observableArrayList();
 
+    /**
+     * The Appointment by contact.
+     */
     static ObservableList<Appointment> apptByContact = FXCollections.observableArrayList();
 
+    /**
+     * Gets all appointments.
+     *
+     * @return the all appointments
+     * @throws SQLException the sql exception
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
         allAppointments.clear();
         PreparedStatement stmt = conn.prepareStatement(allApptSql());
@@ -130,6 +220,12 @@ public class Appointment {
         return allAppointments;
     }
 
+    /**
+     * Gets appointments by week.
+     *
+     * @return the appointments by week
+     * @throws SQLException the sql exception
+     */
     public static ObservableList<Appointment> getAppointmentsByWeek() throws SQLException {
         byWeekAppointments.clear();
         String byWeekSQL = """
@@ -196,6 +292,12 @@ public class Appointment {
         return byWeekAppointments;
     }
 
+    /**
+     * Gets appointments by month.
+     *
+     * @return the appointments by month
+     * @throws SQLException the sql exception
+     */
     public static ObservableList<Appointment> getAppointmentsByMonth() throws SQLException {
         byMonthAppointments.clear();
         String byMonthSQL = """
@@ -263,6 +365,18 @@ public class Appointment {
         return byMonthAppointments;
     }
 
+    /**
+     * Gets Appointment by contact.
+     *
+     * @param contactID the contact id
+     * @return the Appointment by contact
+     * @throws SQLException the sql exception
+     *                      <p>
+     *                      This method is used to get all appointments by contact.
+     *                      <p>
+     *                      It is used in the Contact Schedule Report.
+     *                      This uses a Lambda to filter the appointments by contact.
+     */
     public static ObservableList<Appointment> getApptByContact(int contactID) throws SQLException {
         apptByContact.clear();
         allAppointments.stream().filter(appt -> appt.contact.getContactID() == contactID).forEach(appt -> {
@@ -271,7 +385,12 @@ public class Appointment {
         return apptByContact;
     }
 
-    // Database Operations
+    /**
+     * Delete appointment.
+     *
+     * @param appointmentID the appointment id
+     *                      This method is used to delete an appointment.
+     */
     public static void deleteAppointment(int appointmentID) {
         try {
             // First - Delete any appointment associated with this customer
@@ -283,6 +402,11 @@ public class Appointment {
         }
     }
 
+    /**
+     * Where I started creating the SQL for the AllAppointments Report.
+     *
+     * @return the string
+     */
     public static String allApptSql() {
         return """
                  SELECT    a.appointment_id,
@@ -310,6 +434,23 @@ public class Appointment {
                                 """;
     }
 
+    /**
+     * Create appointment.
+     *
+     * @param title       the title
+     * @param description the description
+     * @param location    the location
+     * @param type        the type
+     * @param startDate   the start date
+     * @param startTime   the start time
+     * @param endDate     the end date
+     * @param endTime     the end time
+     * @param customerID  the customer id
+     * @param userID      the user id
+     * @param contactID   the contact id
+     *                    <p>
+     *                    This method is used to create an appointment.
+     */
     public static void createAppointment(String title, String description, String location, String type, String startDate, String startTime, String endDate, String endTime, int customerID, int userID, int contactID) {
         String startDateUtc = Utility.utcForDatabase(startDate, startTime);
         String endDateUtc = Utility.utcForDatabase(endDate, endTime);
@@ -333,6 +474,24 @@ public class Appointment {
         }
     }
 
+    /**
+     * Update appointment.
+     *
+     * @param appointmentID the appointment id
+     * @param title         the title
+     * @param description   the description
+     * @param location      the location
+     * @param type          the type
+     * @param startDate     the start date
+     * @param startTime     the start time
+     * @param endDate       the end date
+     * @param endTime       the end time
+     * @param customerID    the customer id
+     * @param userID        the user id
+     * @param contactID     the contact id
+     *
+     *                      This method is used to update an existing appointment.
+     */
     public static void updateAppointment(int appointmentID, String title, String description, String location, String type, String startDate, String startTime, String endDate, String endTime, int customerID, int userID, int contactID) {
         String startDateUtc = Utility.utcForDatabase(startDate, startTime);
         String endDateUtc = Utility.utcForDatabase(endDate, endTime);
@@ -356,6 +515,13 @@ public class Appointment {
         }
     }
 
+    /**
+     * Checks and alerts user if they have an upcoming appointments within 15 minutes.
+     *
+     * @param userID the user id
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public static void checkForSoonAppointments(int userID) throws IOException, SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM appointments WHERE User_ID = ? AND Start BETWEEN UTC_TIMESTAMP() AND DATE_ADD(UTC_TIMESTAMP(), INTERVAL 15 MINUTE);");
         stmt.setInt(1, userID);
@@ -366,80 +532,178 @@ public class Appointment {
         }
     }
 
-    //getters and setters
+    /**
+     * Gets appointment id.
+     *
+     * @return the appointment id
+     */
     public int getAppointmentID() {
         return appointmentID;
     }
 
+    /**
+     * Gets period.
+     *
+     * @return the period
+     */
     public String getPeriod() {
         return period;
     }
 
+    /**
+     * Gets title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Gets location.
+     *
+     * @return the location
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Gets start.
+     *
+     * @return the start
+     */
     public String getStart() {
         return start;
     }
 
+    /**
+     * Gets end.
+     *
+     * @return the end
+     */
     public String getEnd() {
         return end;
     }
 
+    /**
+     * Sets last update.
+     *
+     * @param lastUpdate the last update
+     */
     public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
+    /**
+     * Gets last update by.
+     *
+     * @return the last update by
+     */
     public String getLastUpdateBy() {
         return lastUpdateBy;
     }
 
+    /**
+     * Gets start date.
+     *
+     * @return the start date
+     */
     public String getStartDate() {
         return start.substring(0, 10);
     }
 
+    /**
+     * Gets contact name.
+     *
+     * @return the contact name
+     */
     public String getContactName() {
         return contactName;
     }
 
+    /**
+     * Gets customer name.
+     *
+     * @return the customer name
+     */
     public String getCustomerName() {
         return customer.getCustomerName();
     }
 
+    /**
+     * Gets user name.
+     *
+     * @return the user name
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * Gets start time.
+     *
+     * @return the start time
+     */
     public String getStartTime() {
         return startTime;
     }
 
+    /**
+     * Gets end time.
+     *
+     * @return the end time
+     */
     public String getEndTime() {
         return endTime;
     }
 
+    /**
+     * Gets end date.
+     *
+     * @return the end date
+     */
     public String getEndDate() {
         return endDate;
     }
 
+    /**
+     * Appointment overlaps boolean.
+     *
+     * @param start      the start
+     * @param end        the end
+     * @param excludeID  the exclude id
+     * @param customerID the customer id
+     * @return the boolean
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     *                     This method is used to check if an appointment overlaps with another appointment.
+     *                     It is used when creating a new appointment and updating an existing appointment.
+     *
+     *                     A Lambda is also uses here to loop though the list of appointments and check if the appointment overlaps.
+     */
     public static Boolean appointmentOverlaps(LocalDateTime start, LocalDateTime end, String excludeID, int customerID) throws IOException, SQLException {
         AtomicReference<Boolean> hasOverlaps = new AtomicReference<>(false);
 
         allAppointments = getAllAppointments();
-        //        Maybe change this to filtered ?
         allAppointments.forEach(appointment -> {
             if ((excludeID != null && appointment.getAppointmentID() == Integer.parseInt(excludeID) || customerID != appointment.customer.getCustomerID())) {
                 System.out.println("Skipping appointment " + appointment.getAppointmentID());

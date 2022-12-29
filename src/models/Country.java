@@ -29,6 +29,8 @@ public class Country {
      * @param createdBy    the created by
      * @param lastUpdate   the last update
      * @param lastUpdateBy the last update by
+     *                     The Country model
+     *                     This model is used to create Country objects
      */
     public Country(int countryId, String country, String createDate, String createdBy, String lastUpdate, String lastUpdateBy) {
         this.countryId = countryId;
@@ -40,13 +42,33 @@ public class Country {
     }
 
 
+    /**
+     * All countries.
+     */
     static ObservableList<Country> allCountries = FXCollections.observableArrayList();
 
+    /**
+     * All country names.
+     */
     static ObservableList<String> allCountryNames = FXCollections.observableArrayList();
+
+    /**
+     * Instantiates a new Country.
+     *
+     * @param country the country
+     */
     public Country(String country) {
         this.country = country;
     }
 
+    /**
+     * Gets all countries.
+     *
+     * @return the all countries
+     * @throws SQLException the sql exception
+     *                     Gets all countries from the database
+     *                     This method is used to populate the country combo box
+     */
     public static ObservableList<String> getAllCountries() throws SQLException {
         allCountryNames.clear();
 
