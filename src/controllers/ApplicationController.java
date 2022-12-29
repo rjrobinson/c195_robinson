@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.Main;
 import models.Appointment;
+import models.AppointmentReport;
+import models.Contact;
 import models.Customer;
 import support.SceneHelper;
 
@@ -22,7 +24,100 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+
 public class ApplicationController implements Initializable {
+
+    @FXML
+    private TabPane tab;
+    @FXML
+    private Tab allApptTab;
+    // By Week Table Items
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptContact;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptCustomer;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptDescription;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptEndDate;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptEndTime;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptID;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptLocation;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptStartDate;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptStartTime;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptTitle;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptType;
+
+    @FXML
+    private TableColumn<Appointment, String> byWeekApptUser;
+
+    @FXML
+    private Tab byWeekTab;
+
+    @FXML
+    private TableView<Appointment> apptTableByMonth;
+
+    @FXML
+    private TableView<Appointment> apptTableByWeek;
+
+    // By Month Table Items
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptContact;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptCustomer;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptDescription;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptEndDate;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptEndTime;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptID;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptLocation;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptStartDate;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptStartTime;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptTitle;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptType;
+
+    @FXML
+    private TableColumn<Appointment, String> byMonthApptUser;
+
+    @FXML
+    private Tab byMonthTab;
+
+//     All other items
 
     @FXML
     private TableColumn<Appointment, String> apptContact;
@@ -124,9 +219,68 @@ public class ApplicationController implements Initializable {
     @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
+    @FXML
+    public static ObservableList<Appointment> apptByContact = FXCollections.observableArrayList();
+
+    @FXML
+    public static ObservableList<Appointment> byWeekAppointments = FXCollections.observableArrayList();
+    @FXML
+    public static ObservableList<Appointment> byMonthAppointments = FXCollections.observableArrayList();
+    @FXML
+    public static ObservableList<AppointmentReport> report1 = FXCollections.observableArrayList();
+
     public Stage stage;
     public Scene scene;
     SceneHelper sceneHelper;
+
+
+    //     Report 1 - Total number of appointments by type
+    @FXML
+    private TableColumn<AppointmentReport, Integer> reportCount;
+
+    @FXML
+    private TableColumn<AppointmentReport, String> reportMonth;
+
+    @FXML
+    private TableView<AppointmentReport> reportTable;
+
+    @FXML
+    private TableColumn<AppointmentReport, String> reportType;
+
+
+    //     Report 2 - Contact Schedule
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleApptID;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleCustomer;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleDescription;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleEndDate;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleEndTime;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleStartDate;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleStartTime;
+
+    @FXML
+    private TableView<Appointment> contactScheduleTable;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleTitle;
+
+    @FXML
+    private TableColumn<Appointment, String> contactScheduleType;
+
+    @FXML
+    private ComboBox<String> contactDropdown;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -146,9 +300,27 @@ public class ApplicationController implements Initializable {
         try {
             allCustomers = Customer.getAllCustomers();
             allAppointments = Appointment.getAllAppointments();
+            byWeekAppointments = Appointment.getAppointmentsByWeek();
+            byMonthAppointments = Appointment.getAppointmentsByMonth();
+
+            Contact contact = Contact.find(1);
+
+            apptByContact = Appointment.getApptByContact(contact.getContactID());
+
+            contactDropdown.setItems(Contact.getContactNames());
+            contactDropdown.setValue(contact.getContactName());
+
+            // Report 1
+            report1 = AppointmentReport.getAppointmentReport();
+
 
             customerTable.setItems(allCustomers);
             apptTable.setItems(allAppointments);
+            apptTableByWeek.setItems(byWeekAppointments);
+            apptTableByMonth.setItems(byMonthAppointments);
+            reportTable.setItems(report1);
+            contactScheduleTable.setItems(apptByContact);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -169,24 +341,55 @@ public class ApplicationController implements Initializable {
         apptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-
         apptContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-
         apptType.setCellValueFactory(new PropertyValueFactory<>("type"));
-
         apptStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         apptEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         apptStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         apptEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-
         apptCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         apptUser.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
 
-    }
+        byWeekApptID.setCellValueFactory(new PropertyValueFactory<>("period"));
+        byWeekApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        byWeekApptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        byWeekApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        byWeekApptContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        byWeekApptType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        byWeekApptStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        byWeekApptEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        byWeekApptStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        byWeekApptEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        byWeekApptCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        byWeekApptUser.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
-    @FXML
-    void appointmentUpdateHandler(ActionEvent event) {
+        byMonthApptID.setCellValueFactory(new PropertyValueFactory<>("period"));
+        byMonthApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        byMonthApptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        byMonthApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        byMonthApptContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+        byMonthApptType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        byMonthApptStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        byMonthApptEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        byMonthApptStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        byMonthApptEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        byMonthApptCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        byMonthApptUser.setCellValueFactory(new PropertyValueFactory<>("userName"));
+
+        reportCount.setCellValueFactory(new PropertyValueFactory<>("count"));
+        reportMonth.setCellValueFactory(new PropertyValueFactory<>("month"));
+        reportType.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        contactScheduleApptID.setCellValueFactory(new PropertyValueFactory<>("AppointmentID"));
+        contactScheduleTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        contactScheduleType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        contactScheduleDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        contactScheduleStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        contactScheduleStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        contactScheduleEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        contactScheduleEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        contactScheduleCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
     }
 
@@ -339,5 +542,12 @@ public class ApplicationController implements Initializable {
     @FXML
     void logout(ActionEvent event) throws IOException {
         System.exit(0);
+    }
+
+    @FXML
+    void setContactSchedule(ActionEvent event) throws IOException, SQLException {
+        Contact contact = Contact.find(contactDropdown.getValue());
+
+        apptByContact = Appointment.getApptByContact(contact.getContactID());
     }
 }
