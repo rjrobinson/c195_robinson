@@ -34,21 +34,6 @@ class UtilityTest {
     }
 
     @org.junit.jupiter.api.Test
-    void utcForDatabase() {
-        String time = "2021-04-01T12:00Z[UTC]";
-        String expected = "2021-04-01 16:00";
-
-        String actual = Utility.utcForDatabase("2021-04-01", "12:00");
-        assertEquals(expected, actual);
-
-        LocalDateTime time1 = LocalDateTime.of(2021, 4, 1, 7, 0);
-        actual = Utility.utcForDatabase(time1);
-        expected = "2021-04-01 07:00";
-
-        assertEquals(expected, actual);
-    }
-
-    @org.junit.jupiter.api.Test
     void inBusinessHours() {
 
         // Test case 1: Both times within business hours
