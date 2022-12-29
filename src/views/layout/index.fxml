@@ -33,7 +33,6 @@
         <Label layoutX="28.0" layoutY="726.0" text="Appointment Options" />
         <Button fx:id="apptDeleteBtn" layoutX="205.0" layoutY="756.0" mnemonicParsing="false" onAction="#appointmentDeleteHandler" prefHeight="26.0" prefWidth="79.0" text="Delete" />
         <Button fx:id="apptNewBtn" layoutX="26.0" layoutY="756.0" mnemonicParsing="false" onAction="#newApptHandler" prefHeight="26.0" prefWidth="79.0" text="New" />
-        <Button fx:id="reportsBtn" layoutX="657.0" layoutY="743.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="152.0" text="Reports" />
         <Button fx:id="apptUpdateBtn" layoutX="115.0" layoutY="756.0" mnemonicParsing="false" onAction="#updateApptHandler" prefHeight="26.0" prefWidth="79.0" text="Update" />
         <TabPane fx:id="tab" layoutX="26.0" layoutY="314.0" prefHeight="350.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -150,7 +149,16 @@
                 </Tab>
                 <Tab text="Report 3">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="report3Table" layoutX="14.0" layoutY="14.0" prefHeight="298.0" prefWidth="402.0">
+                          <columns>
+                            <TableColumn fx:id="report3Division" editable="false" prefWidth="192.0" sortable="false" text="Division" />
+                            <TableColumn fx:id="report3Count" prefWidth="67.0" text="Count" />
+                              <TableColumn fx:id="report3Percentage" prefWidth="142.0" text="Percentage" />
+                          </columns>
+                        </TableView>
+                     </children></AnchorPane>
                     </content>
                 </Tab>
             </tabs>

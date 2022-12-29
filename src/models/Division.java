@@ -18,7 +18,7 @@ public class Division {
     @FXML
     private int divisionId;
     @FXML
-    private String division;
+    String division;
 
     /**
      * Gets division id.

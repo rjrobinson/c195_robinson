@@ -11,10 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.Main;
-import models.Appointment;
-import models.AppointmentReport;
-import models.Contact;
-import models.Customer;
+import models.*;
 import support.SceneHelper;
 
 import java.io.IOException;
@@ -251,6 +248,9 @@ public class ApplicationController implements Initializable {
     @FXML
     public static ObservableList<AppointmentReport> report1 = FXCollections.observableArrayList();
 
+    @FXML
+    public static ObservableList<CustomerReport> report3 = FXCollections.observableArrayList();
+
     /**
      * The Stage.
      */
@@ -313,6 +313,18 @@ public class ApplicationController implements Initializable {
     @FXML
     private ComboBox<String> contactDropdown;
 
+    @FXML
+    private TableColumn<?, ?> report3Count;
+
+    //     Report 3 - Customers by division;
+    @FXML
+    private TableColumn<CustomerReport, String> report3Division;
+
+    @FXML
+    private TableColumn<CustomerReport, String> report3Percentage;
+
+    @FXML
+    private TableView<CustomerReport> report3Table;
 
 
     /**
@@ -354,12 +366,14 @@ public class ApplicationController implements Initializable {
             // Report 1
             report1 = AppointmentReport.getAppointmentReport();
 
+            report3 = CustomerReport.getCustomerReport();
 
             customerTable.setItems(allCustomers);
             apptTable.setItems(allAppointments);
             apptTableByWeek.setItems(byWeekAppointments);
             apptTableByMonth.setItems(byMonthAppointments);
             reportTable.setItems(report1);
+            report3Table.setItems(report3);
             contactScheduleTable.setItems(apptByContact);
 
         } catch (SQLException e) {
@@ -432,6 +446,9 @@ public class ApplicationController implements Initializable {
         contactScheduleEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         contactScheduleCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
+        report3Count.setCellValueFactory(new PropertyValueFactory<>("count"));
+        report3Division.setCellValueFactory(new PropertyValueFactory<>("division"));
+        report3Percentage.setCellValueFactory(new PropertyValueFactory<>("percentage"));
     }
 
     /**

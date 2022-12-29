@@ -73,7 +73,7 @@ public class Main extends Application {
         ResourceBundle rb = ResourceBundle.getBundle("support/locale", Locale.getDefault());
 
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/layout/index.fxml")), rb);
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/users/login_page.fxml")), rb);
 
             primaryStage.setTitle("WGU | SW2 | C195");
             primaryStage.setScene(new Scene(root));
