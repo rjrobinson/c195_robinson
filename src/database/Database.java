@@ -1,6 +1,8 @@
 package database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * The type Database.
@@ -9,7 +11,7 @@ public class Database {
 
     // The database URL
 //    private static final String DB_URL = "jdbc:mysql://localhost:3306/";
-    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/";
     private static final String DB_NAME = "client_schedule";
     // The database user name and password
     private static final String USERNAME = "sqlUser";
@@ -24,7 +26,7 @@ public class Database {
         try {
             // Open a connection to the database
             String url = DB_URL + DB_NAME + "?connectionTimeZone=SERVER";
-
+            System.out.println(url);
             conn = DriverManager.getConnection(url, USERNAME, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
