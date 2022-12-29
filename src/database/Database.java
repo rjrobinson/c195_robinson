@@ -8,11 +8,12 @@ import java.sql.*;
 public class Database {
 
     // The database URL
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/";
+//    private static final String DB_URL = "jdbc:mysql://localhost:3306/";
+    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/";
     private static final String DB_NAME = "client_schedule";
     // The database user name and password
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String USERNAME = "sqlUser";
+    private static final String PASSWORD = "Passw0rd!";
     // The connection to the database
     private Connection conn;
 
