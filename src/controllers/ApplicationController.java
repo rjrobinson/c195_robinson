@@ -219,34 +219,34 @@ public class ApplicationController implements Initializable {
     private Button reportsBtn;
 
     /**
-     * The All customers.
+     * ObservableList of All customers.
      */
     @FXML
     public static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     /**
-     * The All appointments.
+     * ObservableList of All appointments.
      */
     @FXML
     public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     /**
-     * The Appt by contact.
+     * ObservableList of Appointments by contact.
      */
     @FXML
     public static ObservableList<Appointment> apptByContact = FXCollections.observableArrayList();
 
     /**
-     * The By week appointments.
+     * ObservableList of Appointments grouped by week
      */
     @FXML
     public static ObservableList<Appointment> byWeekAppointments = FXCollections.observableArrayList();
     /**
-     * The By month appointments.
+     * ObservableList of Appointments grouped by month
      */
     @FXML
     public static ObservableList<Appointment> byMonthAppointments = FXCollections.observableArrayList();
     /**
-     * The Report 1.
+     * ObservableList of AppointmentReport. an aggregate of Appointments grouped by type and month and their counts
      */
     @FXML
     public static ObservableList<AppointmentReport> report1 = FXCollections.observableArrayList();
@@ -313,6 +313,16 @@ public class ApplicationController implements Initializable {
     @FXML
     private ComboBox<String> contactDropdown;
 
+
+
+    /**
+     * Initialize.
+     *
+     * @param url            the url
+     * @param resourceBundle the resource bundle
+     *
+     * As the main entry point - I took the approach of a simple SPA (Single Page Application) with a single controller with only external controllers to handle CRUD operations.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         sceneHelper = new SceneHelper(stage);
@@ -477,7 +487,7 @@ public class ApplicationController implements Initializable {
 
 
     /**
-     * The constant selected_part.
+     * The constant selected appointment.
      */
     public static Appointment selectedAppointment = null;
 
@@ -535,7 +545,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Update Appt handler.
+     * Update Appointment handler.
      *
      * @param event the event
      * @throws IOException the io exception
@@ -554,7 +564,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * New Appt handler.
+     * New Appointment handler.
      *
      * @param event the event
      * @throws IOException the io exception
